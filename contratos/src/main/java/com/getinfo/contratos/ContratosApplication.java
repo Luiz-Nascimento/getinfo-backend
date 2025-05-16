@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
-@Profile("dev")
+//#Caso queira testar com banco de dados local, descomente.
+//@Profile("dev")
 public class ContratosApplication {
 
 	public static void main(String[] args) {
