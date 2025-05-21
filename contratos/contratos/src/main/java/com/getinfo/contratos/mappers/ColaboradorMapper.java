@@ -14,4 +14,5 @@ public interface ColaboradorMapper {
     default Optional<ColaboradorExibirDTO> optionalEntityToOptionalExibirDTO(Optional<Colaborador> colaborador) {
         return colaborador.map(this::entityToExibirDTO);
     }
+
 }

@@ -3,7 +3,6 @@ package com.getinfo.contratos.entity;
 import com.getinfo.contratos.enums.Estado;
 import com.getinfo.contratos.enums.TipoEmpresa;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class Empresa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "empresaId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Contrato> contratos;
 
     private String cnpj;

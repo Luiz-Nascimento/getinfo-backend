@@ -2,6 +2,7 @@ package com.getinfo.contratos.controller;
 
 import com.getinfo.contratos.DTOs.ColaboradorCreateDTO;
 import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
+import com.getinfo.contratos.DTOs.ColaboradorPatchDTO;
 import com.getinfo.contratos.entity.Colaborador;
 import com.getinfo.contratos.mappers.ColaboradorMapper;
 import com.getinfo.contratos.repository.ColaboradorRepository;
@@ -39,9 +40,18 @@ public class ColaboradorController {
     @PostMapping
     public ResponseEntity<ColaboradorExibirDTO> salvar(@RequestBody ColaboradorCreateDTO colaboradorCreateDTO) {
         Colaborador colaborador = colaboradorService.CreateDTOtoEntity(colaboradorCreateDTO);
-        colaboradorRepository.save(colaborador);
+        colaboradorService.salvar(colaborador);
         ColaboradorExibirDTO response = colaboradorService.entityToExibirDTO(colaborador);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ColaboradorExibirDTO> atualizarParcial(@PathVariable Long id, @RequestBody ColaboradorPatchDTO colaboradorAtualizar) {
+        ColaboradorExibirDTO colaboradorAtualizado = colaboradorService.atualizarParcial(id, colaboradorAtualizar);
+        if (colaboradorAtualizado != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(colaboradorAtualizado);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @DeleteMapping("/{id}")
