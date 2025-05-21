@@ -47,7 +47,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario registrarNovoUsuario(UsuarioRegistroDTO dto){
+    public void registrarNovoUsuario(UsuarioRegistroDTO dto){
         if (!dto.senha().equals(dto.confirmarSenha())) {
             throw new IllegalArgumentException("As senhas não conferem!");
         }
@@ -63,11 +63,17 @@ public class UsuarioService {
         usuario.setEmail(dto.email());
         usuario.setSenha(dto.senha());
         usuario.getRoles().add(Roles.USER);
-        return usuarioRepository.save(usuario);
+        usuarioRepository.save(usuario);
     }
 
-    public void deletar(Long id) {
-        usuarioRepository.deleteById(id);
+    public boolean deletar(Long id) {
+        if (usuarioRepository.findById(id).isPresent()) {
+            usuarioRepository.deleteById(id);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 
