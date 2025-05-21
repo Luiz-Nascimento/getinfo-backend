@@ -7,6 +7,7 @@ import com.getinfo.contratos.enums.Roles;
 import com.getinfo.contratos.mappers.UsuarioMapper;
 import com.getinfo.contratos.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +22,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioMapper usuarioMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
@@ -61,7 +65,7 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setUsername(dto.username());
         usuario.setEmail(dto.email());
-        usuario.setSenha(dto.senha());
+        usuario.setSenha(passwordEncoder.encode(dto.senha()));
         usuario.getRoles().add(Roles.USER);
         usuarioRepository.save(usuario);
     }
