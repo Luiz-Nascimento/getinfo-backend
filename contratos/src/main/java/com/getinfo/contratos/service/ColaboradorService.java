@@ -52,9 +52,6 @@ public class ColaboradorService {
             if (colaboradorPatchDTO.status() != null) {
                 colaborador.setStatus(colaboradorPatchDTO.status());
             }
-            if (colaboradorPatchDTO.email() != null) {
-                colaborador.setEmail(colaboradorPatchDTO.email());
-            }
             if (colaboradorPatchDTO.telefone() != null) {
                 colaborador.setTelefone(colaboradorPatchDTO.telefone());
             }
