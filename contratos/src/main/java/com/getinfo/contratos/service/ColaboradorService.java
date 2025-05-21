@@ -2,7 +2,9 @@ package com.getinfo.contratos.service;
 
 import com.getinfo.contratos.DTOs.ColaboradorCreateDTO;
 import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
+import com.getinfo.contratos.DTOs.ColaboradorPatchDTO;
 import com.getinfo.contratos.entity.Colaborador;
+import com.getinfo.contratos.enums.ColaboradorStatus;
 import com.getinfo.contratos.mappers.ColaboradorMapper;
 import com.getinfo.contratos.repository.ColaboradorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,28 @@ public class ColaboradorService {
     public Optional<ColaboradorExibirDTO> buscarPorIdDTO(Long id) {
         return colaboradorMapper.optionalEntityToOptionalExibirDTO(buscarPorId(id));
     }
+
+    public ColaboradorExibirDTO atualizarParcial(Long id, ColaboradorPatchDTO colaboradorPatchDTO) {
+        Optional<Colaborador> colaboradorOpt = buscarPorId(id);
+        if (colaboradorOpt.isPresent()) {
+            Colaborador colaborador = colaboradorOpt.get();
+            if (colaboradorPatchDTO.status() != null) {
+                colaborador.setStatus(colaboradorPatchDTO.status());
+            }
+            if (colaboradorPatchDTO.telefone() != null) {
+                colaborador.setTelefone(colaboradorPatchDTO.telefone());
+            }
+            if (colaboradorPatchDTO.cargo() != null) {
+                colaborador.setCargo(colaboradorPatchDTO.cargo());
+            }
+
+            salvar(colaborador);
+            ColaboradorExibirDTO colaboradorExibirDTO = colaboradorMapper.entityToExibirDTO(colaborador);
+            return colaboradorExibirDTO;
+        }
+        return null;
+    }
+
 
 
 
