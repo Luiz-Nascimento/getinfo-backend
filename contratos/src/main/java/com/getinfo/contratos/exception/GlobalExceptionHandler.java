@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,33 @@ public class GlobalExceptionHandler {
                 .body(Map.of(
                         "status", 400,
                         "error", "Bad Request",
+                        "message", mensagem
+                ));
+    }
+    // Novo handler para IllegalArgumentException
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "status", HttpStatus.BAD_REQUEST.value(),
+                        "error", HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        "message", ex.getMessage()
+                ));
+    }
+
+    // Handler adicional para tratar exceções de tipo inválido (comumente associadas)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String mensagem = "Parâmetro inválido: " + ex.getName() +
+                ". Tipo esperado: " + (ex.getRequiredType() != null ?
+                ex.getRequiredType().getSimpleName() : "não especificado");
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "status", HttpStatus.BAD_REQUEST.value(),
+                        "error", HttpStatus.BAD_REQUEST.getReasonPhrase(),
                         "message", mensagem
                 ));
     }
