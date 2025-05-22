@@ -1,5 +1,6 @@
 package com.getinfo.contratos.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,17 @@ public class GlobalExceptionHandler {
                         "status", HttpStatus.BAD_REQUEST.value(),
                         "error", HttpStatus.BAD_REQUEST.getReasonPhrase(),
                         "message", mensagem
+                ));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "status", HttpStatus.NOT_FOUND.value(),
+                        "error", HttpStatus.NOT_FOUND.getReasonPhrase(),
+                        "message", ex.getMessage()
                 ));
     }
 

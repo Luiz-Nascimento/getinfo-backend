@@ -39,6 +39,21 @@ public class EmpresaService {
         return empresaRepository.findById(id);
     }
 
+    public Optional<Empresa> buscarPorCnpj(String cnpj) {
+        return empresaRepository.findByCnpj(cnpj);
+    }
+
+    public String sanitizarCnpj(String cnpj) {
+        return cnpj.replaceAll("\\D", "");
+    }
+
+
+    public Optional<EmpresaExibirDTO> buscarPorCnpjDTO(String cnpj) {
+        cnpj = sanitizarCnpj(cnpj);
+        Optional<Empresa> empresa = empresaRepository.findByCnpj(cnpj);
+        return empresaMapper.optionalEntityToOptionalExibirDTO(empresa);
+    }
+
     public Optional<EmpresaExibirDTO> buscarPorIdPublic(Long id) {
         Optional<Empresa> empresa = buscarPorId(id);
         return empresaMapper.optionalEntityToOptionalExibirDTO(empresa);

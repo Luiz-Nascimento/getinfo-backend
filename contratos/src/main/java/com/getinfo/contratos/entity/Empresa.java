@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,8 +19,8 @@ public class Empresa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "empresaId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Contrato> contratos;
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY)
+    private List<Contrato> contratos = new ArrayList<>();
 
     private String cnpj;
     private String razaoSocial;

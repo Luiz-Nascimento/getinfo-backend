@@ -4,6 +4,9 @@ import com.getinfo.contratos.enums.ColaboradorStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 public class Colaborador {
@@ -11,8 +14,9 @@ public class Colaborador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@ManyToMany(mappedBy = "funcionarios")
-    //private List<Contrato> contratos;
+    // Relacionamento inverso (opcional)
+    @ManyToMany(mappedBy = "colaboradores")
+    private Set<Contrato> contratos = new HashSet<>();
 
     private String nome;
     private String sobrenome;
