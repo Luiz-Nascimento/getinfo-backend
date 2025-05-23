@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,16 +20,20 @@ public class Empresa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "empresaId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Contrato> contratos;
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY)
+    private List<Contrato> contratos = new ArrayList<>();
 
+    @Column(unique = true, nullable = false, length = 14)
     private String cnpj;
+    @Column(unique = true, nullable = false)
     private String razaoSocial;
+    @Column(nullable = false)
     private String nomeFantasia;
 
     @Enumerated(EnumType.STRING)
     private TipoEmpresa tipo;
 
+    private Boolean ativo = true;
     private String cep;
     private String logradouro;
     private String numero;

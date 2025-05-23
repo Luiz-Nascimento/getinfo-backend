@@ -1,6 +1,8 @@
 package com.getinfo.contratos.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.boot.json.JsonParseException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -61,6 +63,45 @@ public class GlobalExceptionHandler {
                         "status", HttpStatus.BAD_REQUEST.value(),
                         "error", HttpStatus.BAD_REQUEST.getReasonPhrase(),
                         "message", mensagem
+                ));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "status", HttpStatus.NOT_FOUND.value(),
+                        "error", HttpStatus.NOT_FOUND.getReasonPhrase(),
+                        "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        // Verifica se é erro de CNPJ duplicado
+        if (ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
+            org.hibernate.exception.ConstraintViolationException cause =
+                    (org.hibernate.exception.ConstraintViolationException) ex.getCause();
+
+            if (cause.getSQLException().getMessage().contains("Duplicate entry")
+                    && cause.getSQLException().getMessage().contains("UK74xhe5obsc7li6x4q5wi75pd5")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("Já existe uma empresa cadastrada com este CNPJ");
+            }
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Erro interno ao processar a requisição");
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "status", HttpStatus.CONFLICT.value(),
+                        "error", HttpStatus.CONFLICT.getReasonPhrase(),
+                        "message", ex.getMessage()
                 ));
     }
 

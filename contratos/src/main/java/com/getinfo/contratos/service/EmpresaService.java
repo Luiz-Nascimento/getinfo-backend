@@ -4,7 +4,10 @@ import com.getinfo.contratos.DTOs.EmpresaCreateDTO;
 import com.getinfo.contratos.DTOs.EmpresaExibirDTO;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.mappers.EmpresaMapper;
+import com.getinfo.contratos.mappers.EmpresaMapperImpl;
 import com.getinfo.contratos.repository.EmpresaRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ public class EmpresaService {
 
     @Autowired
     private EmpresaMapper empresaMapper;
+    @Autowired
+    private EmpresaMapperImpl empresaMapperImpl;
 
     public List<Empresa> listarTodas() {
         return empresaRepository.findAll();
@@ -39,6 +44,21 @@ public class EmpresaService {
         return empresaRepository.findById(id);
     }
 
+    public Optional<Empresa> buscarPorCnpj(String cnpj) {
+        return empresaRepository.findByCnpj(cnpj);
+    }
+
+    public String sanitizarCnpj(String cnpj) {
+        return cnpj.replaceAll("\\D", "");
+    }
+
+
+    public Optional<EmpresaExibirDTO> buscarPorCnpjDTO(String cnpj) {
+        cnpj = sanitizarCnpj(cnpj);
+        Optional<Empresa> empresa = empresaRepository.findByCnpj(cnpj);
+        return empresaMapper.optionalEntityToOptionalExibirDTO(empresa);
+    }
+
     public Optional<EmpresaExibirDTO> buscarPorIdPublic(Long id) {
         Optional<Empresa> empresa = buscarPorId(id);
         return empresaMapper.optionalEntityToOptionalExibirDTO(empresa);
@@ -50,12 +70,42 @@ public class EmpresaService {
     }
 
     public Empresa toEntity(EmpresaCreateDTO empresaDTO) {
-        return empresaMapper.createDTOtoEntity(empresaDTO);
+        EmpresaCreateDTO dtoSanitizado = new EmpresaCreateDTO(
+                sanitizarCnpj(empresaDTO.cnpj()),
+                empresaDTO.razaoSocial(),
+                empresaDTO.nomeFantasia(),
+                empresaDTO.tipo(),
+                empresaDTO.cep(),
+                empresaDTO.logradouro(),
+                empresaDTO.bairro(),
+                empresaDTO.numero(),
+                empresaDTO.estado(),
+                empresaDTO.cidade(),
+                empresaDTO.complemento(),
+                empresaDTO.email(),
+                empresaDTO.telefone(),
+                empresaDTO.nomeResponsavel(),
+                empresaDTO.emailResponsavel(),
+                empresaDTO.telefoneResponsavel(),
+                empresaDTO.cpfResponsavel()
+        );
+        return empresaMapper.createDTOtoEntity(dtoSanitizado);
     }
 
     public void deletar(Long id) {
         empresaRepository.deleteById(id);
     }
+    @Transactional
+    public void arquivar(Long id) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada"));
+        if (!empresa.getAtivo()) {
+            throw new IllegalStateException("Empresa já arquivada!");
+        }
+        empresa.setAtivo(false);
+    }
+
+
 
 
 
