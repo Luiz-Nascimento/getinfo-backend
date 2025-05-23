@@ -2,6 +2,7 @@ package com.getinfo.contratos.controller;
 
 import com.getinfo.contratos.DTOs.ContratoCreateDTO;
 import com.getinfo.contratos.DTOs.ContratoExibirDTO;
+import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.service.ContratoService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,12 @@ public class ContratoController {
     public ResponseEntity<ContratoExibirDTO> criarContrato(@RequestBody ContratoCreateDTO contratoCreateDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(contratoService.criarContrato(contratoCreateDTO));
 
+    }
+
+    @PatchMapping("/ativar/{id}")
+    public ResponseEntity<Void> ativarContrato(@PathVariable Long id) {
+        contratoService.ativar(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/arquivar/{id}")

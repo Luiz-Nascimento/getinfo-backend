@@ -43,7 +43,8 @@ public class ContratoService {
         for (Contrato contrato:  contratoRepository.findAll()) {
             contratoExibirDTOS.add(new ContratoExibirDTO(
                     contrato.getId(),
-                    contrato.getEmpresa().getNomeFantasia(), // pega só o nome fantasia da empresa
+                    contrato.getEmpresa().getNomeFantasia(),
+                    contrato.getEmpresa().getCnpj(),// pega só o nome fantasia da empresa
                     contrato.getStatus(),
                     contrato.getValor(),
                     contrato.getDescricao(),
@@ -76,7 +77,8 @@ public class ContratoService {
         contratoRepository.save(contrato);
         return new ContratoExibirDTO(
                 contrato.getId(),
-                contrato.getEmpresa().getNomeFantasia(), // pega só o nome fantasia da empresa
+                contrato.getEmpresa().getNomeFantasia(),
+                contrato.getEmpresa().getCnpj(),// pega só o nome fantasia da empresa
                 contrato.getStatus(),
                 contrato.getValor(),
                 contrato.getDescricao(),
@@ -97,6 +99,16 @@ public class ContratoService {
             throw new IllegalStateException("Contrato já está arquivado");
         }
         contrato.setStatus(StatusContrato.ARQUIVADO);
+    }
+
+    @Transactional
+    public void ativar(Long id) {
+        Contrato contrato = contratoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado!"));
+        if (contrato.getStatus().equals(StatusContrato.ATIVO) ) {
+            throw new IllegalStateException("Contrato já está ativo");
+        }
+        contrato.setStatus(StatusContrato.ATIVO);
     }
 
 }

@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public record ContratoExibirDTO(
         Long id,
         String nomeFantasia,
+        String cnpj,
         StatusContrato statusContrato,
         BigDecimal valor,
         String descricao,

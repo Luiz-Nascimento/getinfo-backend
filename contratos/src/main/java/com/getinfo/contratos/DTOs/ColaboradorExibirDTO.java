@@ -7,6 +7,9 @@ public record ColaboradorExibirDTO(
         String nome,
         String sobrenome,
         ColaboradorStatus status,
+        String cpf,
+        String email,
+        String telefone,
         String cargo
 )
 {}
