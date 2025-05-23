@@ -26,7 +26,9 @@ public class Empresa {
 
     @Column(unique = true, nullable = false, length = 14)
     private String cnpj;
+    @Column(unique = true, nullable = false)
     private String razaoSocial;
+    @Column(nullable = false)
     private String nomeFantasia;
 
     @Enumerated(EnumType.STRING)

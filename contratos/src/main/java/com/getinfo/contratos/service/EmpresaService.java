@@ -4,6 +4,7 @@ import com.getinfo.contratos.DTOs.EmpresaCreateDTO;
 import com.getinfo.contratos.DTOs.EmpresaExibirDTO;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.mappers.EmpresaMapper;
+import com.getinfo.contratos.mappers.EmpresaMapperImpl;
 import com.getinfo.contratos.repository.EmpresaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,8 @@ public class EmpresaService {
 
     @Autowired
     private EmpresaMapper empresaMapper;
+    @Autowired
+    private EmpresaMapperImpl empresaMapperImpl;
 
     public List<Empresa> listarTodas() {
         return empresaRepository.findAll();
@@ -101,6 +104,18 @@ public class EmpresaService {
         }
         empresa.get().setAtivo(false);
         empresaRepository.save(empresa.get());
+    }
+
+    @Transactional
+    public EmpresaExibirDTO restaurarPorId(Long id) {
+        Empresa empresa = empresaRepository.findByIdDeleted(id)
+                .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada com esse id"));
+        if (empresa.getAtivo()) {
+            throw new IllegalStateException("Empresa já está ativa");
+        }
+        empresa.setAtivo(true);
+        return empresaMapper.entityToExibirDTO(empresa);
+
     }
 
 

@@ -58,6 +58,12 @@ public class EmpresaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/desarquivar/{id}")
+    public ResponseEntity<EmpresaExibirDTO> desarquivar(@PathVariable Long id) {
+        EmpresaExibirDTO empresa = empresaService.restaurarPorId(id);
+        return ResponseEntity.ok(empresa);
+    }
+
 
 //    @DeleteMapping("/delete/{id}")
 //    public ResponseEntity<Void> hardDelete(@PathVariable Long id) {
