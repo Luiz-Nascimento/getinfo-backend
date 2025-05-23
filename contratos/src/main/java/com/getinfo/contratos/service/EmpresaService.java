@@ -5,6 +5,8 @@ import com.getinfo.contratos.DTOs.EmpresaExibirDTO;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.mappers.EmpresaMapper;
 import com.getinfo.contratos.repository.EmpresaRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +72,16 @@ public class EmpresaService {
 
     public void deletar(Long id) {
         empresaRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deletarLogico(Long id) {
+        Optional<Empresa> empresa = empresaRepository.findById(id);
+        if (empresa.isEmpty()) {
+            throw new EntityNotFoundException("Empresa não encontrada");
+        }
+        empresa.get().setAtivo(false);
+        empresaRepository.save(empresa.get());
     }
 
 
