@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@SQLRestriction("ativo = true")
 public class Empresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -7,6 +7,8 @@ import com.getinfo.contratos.entity.Colaborador;
 import com.getinfo.contratos.enums.ColaboradorStatus;
 import com.getinfo.contratos.mappers.ColaboradorMapper;
 import com.getinfo.contratos.repository.ColaboradorRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,9 +51,6 @@ public class ColaboradorService {
         Optional<Colaborador> colaboradorOpt = buscarPorId(id);
         if (colaboradorOpt.isPresent()) {
             Colaborador colaborador = colaboradorOpt.get();
-            if (colaboradorPatchDTO.status() != null) {
-                colaborador.setStatus(colaboradorPatchDTO.status());
-            }
             if (colaboradorPatchDTO.email() != null) {
                 colaborador.setEmail(colaboradorPatchDTO.email());
             }
@@ -67,6 +66,15 @@ public class ColaboradorService {
             return colaboradorExibirDTO;
         }
         return null;
+    }
+    @Transactional
+    public void desativar(Long id) {
+        Colaborador colaborador = colaboradorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Colaborador não encontrado"));
+        if (colaborador.getStatus().equals(ColaboradorStatus.DESLIGADO)) {
+            throw new IllegalStateException("Colaborador já está desligado.");
+        }
+        colaborador.setStatus(ColaboradorStatus.DESLIGADO);
     }
 
 

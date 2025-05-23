@@ -16,7 +16,5 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
 
     Optional<Empresa> findByCnpj(String cnpj);
 
-    @Query(value = "SELECT * FROM empresa WHERE id = :id", nativeQuery = true)
-    Optional<Empresa> findByIdDeleted(@Param("id") Long id);
 
 }

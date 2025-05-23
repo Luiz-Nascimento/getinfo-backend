@@ -54,14 +54,10 @@ public class ColaboradorController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
-        Optional<Colaborador> colaborador = colaboradorService.buscarPorId(id);
-        if (colaborador.isPresent()) {
-            colaboradorService.deletar(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    @DeleteMapping("/desligar/{id}")
+    public ResponseEntity<Void> desligar(@PathVariable Long id) {
+        colaboradorService.desativar(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

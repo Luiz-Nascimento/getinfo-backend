@@ -95,28 +95,17 @@ public class EmpresaService {
     public void deletar(Long id) {
         empresaRepository.deleteById(id);
     }
-
     @Transactional
-    public void deletarLogico(Long id) {
-        Optional<Empresa> empresa = empresaRepository.findById(id);
-        if (empresa.isEmpty()) {
-            throw new EntityNotFoundException("Empresa não encontrada");
+    public void arquivar(Long id) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada"));
+        if (!empresa.getAtivo()) {
+            throw new IllegalStateException("Empresa já arquivada!");
         }
-        empresa.get().setAtivo(false);
-        empresaRepository.save(empresa.get());
+        empresa.setAtivo(false);
     }
 
-    @Transactional
-    public EmpresaExibirDTO restaurarPorId(Long id) {
-        Empresa empresa = empresaRepository.findByIdDeleted(id)
-                .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada com esse id"));
-        if (empresa.getAtivo()) {
-            throw new IllegalStateException("Empresa já está ativa");
-        }
-        empresa.setAtivo(true);
-        return empresaMapper.entityToExibirDTO(empresa);
 
-    }
 
 
 

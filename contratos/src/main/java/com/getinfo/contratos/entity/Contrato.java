@@ -22,7 +22,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@SQLRestriction("ativo = true")
 public class Contrato {
 
     @Id
@@ -44,8 +43,6 @@ public class Contrato {
     @Enumerated(EnumType.STRING)
     @NotNull
     private StatusContrato status;
-
-    private boolean ativo = true;
 
     @NotNull
     @DecimalMin("0.0")

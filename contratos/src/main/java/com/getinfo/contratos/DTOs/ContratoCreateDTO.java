@@ -6,13 +6,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record ContratoCreateDTO(
-        String cnpj,
-        BigDecimal valor,
-        String descricao,
-        TipoContrato tipo,
-        LocalDate dataInicio,
-        LocalDate dataFim
-)
+    String cnpj,
+    BigDecimal valor,
+    String descricao,
+    TipoContrato tipo,
+    LocalDate dataInicio,
+    LocalDate dataFim
+    )
 {
 
 

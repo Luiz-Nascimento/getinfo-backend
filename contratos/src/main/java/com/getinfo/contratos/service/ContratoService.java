@@ -10,6 +10,7 @@ import com.getinfo.contratos.mappers.ContratoMapper;
 import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.repository.EmpresaRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -64,7 +65,6 @@ public class ContratoService {
         String cnpjSanitizado = empresaService.sanitizarCnpj(contratoCreateDTO.cnpj());
         System.out.println(cnpjSanitizado);
         Optional<Empresa> empresa = empresaRepository.findByCnpj(cnpjSanitizado);
-        System.out.println(empresa.isEmpty());
         if (empresa.isEmpty()) {
             throw new EntityNotFoundException("Empresa não existente com esse CNPJ");
         }
@@ -89,14 +89,14 @@ public class ContratoService {
     public void deletar(Long id) {
         contratoRepository.deleteById(id);
     }
-
+    @Transactional
     public void arquivar(Long id) {
-        Optional<Contrato> contrato = contratoRepository.findById(id);
-        if (contrato.isEmpty()) {
-            throw new EntityNotFoundException("Contrato não encontrado com este id");
+        Contrato contrato = contratoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado!"));
+        if (contrato.getStatus().equals(StatusContrato.ARQUIVADO)) {
+            throw new IllegalStateException("Contrato já está arquivado");
         }
-        contrato.get().setAtivo(false);
-        contratoRepository.save(contrato.get());
+        contrato.setStatus(StatusContrato.ARQUIVADO);
     }
 
 }
