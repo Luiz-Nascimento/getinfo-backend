@@ -24,6 +24,7 @@ public class Empresa {
     @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY)
     private List<Contrato> contratos = new ArrayList<>();
 
+    @Column(unique = true, nullable = false, length = 14)
     private String cnpj;
     private String razaoSocial;
     private String nomeFantasia;

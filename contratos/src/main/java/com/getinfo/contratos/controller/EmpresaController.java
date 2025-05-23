@@ -52,23 +52,23 @@ public class EmpresaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @DeleteMapping("/soft-delete/{id}")
+    @DeleteMapping("/arquivar/{id}")
     public ResponseEntity<Void> softDelete(@PathVariable Long id) {
         empresaService.deletarLogico(id);
         return ResponseEntity.noContent().build();
     }
 
 
-    @DeleteMapping("/hard-delete/{id}")
-    public ResponseEntity<Void> hardDelete(@PathVariable Long id) {
-        Optional<Empresa> empresa = empresaService.buscarPorId(id);
-        if (empresa.isPresent()) {
-            empresaService.deletar(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<Void> hardDelete(@PathVariable Long id) {
+//        Optional<Empresa> empresa = empresaService.buscarPorId(id);
+//        if (empresa.isPresent()) {
+//            empresaService.deletar(id);
+//            return ResponseEntity.noContent().build();
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
 
 
