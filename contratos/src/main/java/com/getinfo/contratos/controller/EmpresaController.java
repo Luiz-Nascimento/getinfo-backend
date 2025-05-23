@@ -2,6 +2,7 @@ package com.getinfo.contratos.controller;
 
 import com.getinfo.contratos.DTOs.EmpresaCreateDTO;
 import com.getinfo.contratos.DTOs.EmpresaExibirDTO;
+import com.getinfo.contratos.DTOs.EmpresaPatchDTO;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.mappers.EmpresaMapper;
 import com.getinfo.contratos.service.EmpresaService;
@@ -50,6 +51,11 @@ public class EmpresaController {
         empresa = empresaService.salvar(empresa);
         EmpresaExibirDTO response = empresaMapper.entityToExibirDTO(empresa);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @PatchMapping("/editar/{id}")
+    public ResponseEntity<EmpresaExibirDTO> editar(@PathVariable Long id, @Valid @RequestBody EmpresaPatchDTO empresaPatchDTO) {
+        EmpresaExibirDTO empresaExibirDTO = empresaService.editar(id, empresaPatchDTO);
+        return ResponseEntity.ok(empresaExibirDTO);
     }
 
     @DeleteMapping("/{id}")
