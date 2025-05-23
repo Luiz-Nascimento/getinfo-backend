@@ -94,5 +94,16 @@ public class GlobalExceptionHandler {
                 .body("Erro interno ao processar a requisição");
     }
 
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "status", HttpStatus.CONFLICT.value(),
+                        "error", HttpStatus.CONFLICT.getReasonPhrase(),
+                        "message", ex.getMessage()
+                ));
+    }
+
 }
 
