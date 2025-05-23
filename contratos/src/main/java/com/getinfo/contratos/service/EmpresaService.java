@@ -2,6 +2,7 @@ package com.getinfo.contratos.service;
 
 import com.getinfo.contratos.DTOs.EmpresaCreateDTO;
 import com.getinfo.contratos.DTOs.EmpresaExibirDTO;
+import com.getinfo.contratos.DTOs.EmpresaPatchDTO;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.mappers.EmpresaMapper;
 import com.getinfo.contratos.mappers.EmpresaMapperImpl;
@@ -67,6 +68,17 @@ public class EmpresaService {
 
     public Empresa salvar(Empresa empresa) {
         return empresaRepository.save(empresa);
+    }
+
+    @Transactional
+    public EmpresaExibirDTO editar(Long id, EmpresaPatchDTO empresaPatchDTO) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada."));
+
+        empresaMapper.patchEmpresaFromDto(empresaPatchDTO, empresa);
+        empresaRepository.save(empresa);
+        return empresaMapper.entityToExibirDTO(empresa);
+
     }
 
     public Empresa toEntity(EmpresaCreateDTO empresaDTO) {
