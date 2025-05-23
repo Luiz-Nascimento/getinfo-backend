@@ -7,6 +7,7 @@ import com.getinfo.contratos.enums.TipoContrato;
 import java.math.BigDecimal;
 
 public record ContratoExibirDTO(
+        Long id,
         String nomeFantasia,
         StatusContrato statusContrato,
         BigDecimal valor,

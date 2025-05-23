@@ -11,17 +11,18 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
 @Entity
 @Table(name = "contratos")
 @Getter
 @Setter
 @NoArgsConstructor
+@SQLRestriction("ativo = true")
 public class Contrato {
 
     @Id
@@ -43,6 +44,8 @@ public class Contrato {
     @Enumerated(EnumType.STRING)
     @NotNull
     private StatusContrato status;
+
+    private boolean ativo = true;
 
     @NotNull
     @DecimalMin("0.0")

@@ -14,7 +14,6 @@ public class Colaborador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Relacionamento inverso (opcional)
     @ManyToMany(mappedBy = "colaboradores")
     private Set<Contrato> contratos = new HashSet<>();
 

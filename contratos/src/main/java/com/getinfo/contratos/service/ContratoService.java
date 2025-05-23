@@ -41,6 +41,7 @@ public class ContratoService {
         List<ContratoExibirDTO> contratoExibirDTOS = new ArrayList<>();
         for (Contrato contrato:  contratoRepository.findAll()) {
             contratoExibirDTOS.add(new ContratoExibirDTO(
+                    contrato.getId(),
                     contrato.getEmpresa().getNomeFantasia(), // pega só o nome fantasia da empresa
                     contrato.getStatus(),
                     contrato.getValor(),
@@ -61,7 +62,9 @@ public class ContratoService {
     }
     public ContratoExibirDTO criarContrato(ContratoCreateDTO contratoCreateDTO) {
         String cnpjSanitizado = empresaService.sanitizarCnpj(contratoCreateDTO.cnpj());
+        System.out.println(cnpjSanitizado);
         Optional<Empresa> empresa = empresaRepository.findByCnpj(cnpjSanitizado);
+        System.out.println(empresa.isEmpty());
         if (empresa.isEmpty()) {
             throw new EntityNotFoundException("Empresa não existente com esse CNPJ");
         }
@@ -72,6 +75,7 @@ public class ContratoService {
 
         contratoRepository.save(contrato);
         return new ContratoExibirDTO(
+                contrato.getId(),
                 contrato.getEmpresa().getNomeFantasia(), // pega só o nome fantasia da empresa
                 contrato.getStatus(),
                 contrato.getValor(),
@@ -84,6 +88,15 @@ public class ContratoService {
 
     public void deletar(Long id) {
         contratoRepository.deleteById(id);
+    }
+
+    public void arquivar(Long id) {
+        Optional<Contrato> contrato = contratoRepository.findById(id);
+        if (contrato.isEmpty()) {
+            throw new EntityNotFoundException("Contrato não encontrado com este id");
+        }
+        contrato.get().setAtivo(false);
+        contratoRepository.save(contrato.get());
     }
 
 }

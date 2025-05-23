@@ -67,7 +67,26 @@ public class EmpresaService {
     }
 
     public Empresa toEntity(EmpresaCreateDTO empresaDTO) {
-        return empresaMapper.createDTOtoEntity(empresaDTO);
+        EmpresaCreateDTO dtoSanitizado = new EmpresaCreateDTO(
+                sanitizarCnpj(empresaDTO.cnpj()),
+                empresaDTO.razaoSocial(),
+                empresaDTO.nomeFantasia(),
+                empresaDTO.tipo(),
+                empresaDTO.cep(),
+                empresaDTO.logradouro(),
+                empresaDTO.bairro(),
+                empresaDTO.numero(),
+                empresaDTO.estado(),
+                empresaDTO.cidade(),
+                empresaDTO.complemento(),
+                empresaDTO.email(),
+                empresaDTO.telefone(),
+                empresaDTO.nomeResponsavel(),
+                empresaDTO.emailResponsavel(),
+                empresaDTO.telefoneResponsavel(),
+                empresaDTO.cpfResponsavel()
+        );
+        return empresaMapper.createDTOtoEntity(dtoSanitizado);
     }
 
     public void deletar(Long id) {

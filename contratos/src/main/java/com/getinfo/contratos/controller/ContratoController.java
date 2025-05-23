@@ -29,6 +29,12 @@ public class ContratoController {
 
     }
 
+    @DeleteMapping("/arquivar/{id}")
+    public ResponseEntity<Void> arquivarContrato(@PathVariable Long id) {
+        contratoService.arquivar(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }
