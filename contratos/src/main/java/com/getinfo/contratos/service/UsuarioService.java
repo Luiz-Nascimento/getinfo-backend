@@ -3,7 +3,6 @@ package com.getinfo.contratos.service;
 import com.getinfo.contratos.DTOs.UsuarioExibirDTO;
 import com.getinfo.contratos.DTOs.UsuarioRegistroDTO;
 import com.getinfo.contratos.entity.Usuario;
-import com.getinfo.contratos.enums.Roles;
 import com.getinfo.contratos.mappers.UsuarioMapper;
 import com.getinfo.contratos.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +65,6 @@ public class UsuarioService {
         usuario.setUsername(dto.username());
         usuario.setEmail(dto.email());
         usuario.setSenha(passwordEncoder.encode(dto.senha()));
-        usuario.getRoles().add(Roles.USER);
         usuarioRepository.save(usuario);
     }
 
