@@ -96,6 +96,9 @@ public class ContratoService {
         if (anexo == null || anexo.isEmpty()) {
             throw new IllegalArgumentException("Arquivo não enviado ou está vazio");
         }
+        if (!"application/pdf".equals(anexo.getContentType())) {
+            throw new IllegalArgumentException("Tipo de arquivo não suportado. Envie um PDF.");
+        }
 
         try {
             contrato.setAnexo(anexo.getBytes());
