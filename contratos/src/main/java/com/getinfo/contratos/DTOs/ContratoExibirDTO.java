@@ -13,6 +13,7 @@ public record ContratoExibirDTO(
         StatusContrato statusContrato,
         BigDecimal valor,
         String descricao,
-        TipoContrato tipo
+        TipoContrato tipo,
+        String nomeResponsavel
 ) {
 }

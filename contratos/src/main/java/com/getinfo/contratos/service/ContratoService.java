@@ -48,7 +48,8 @@ public class ContratoService {
                     contrato.getStatus(),
                     contrato.getValor(),
                     contrato.getDescricao(),
-                    contrato.getTipo()
+                    contrato.getTipo(),
+                    contrato.getNomeResponsavel()
             ));
         }
         return contratoExibirDTOS;
@@ -64,16 +65,12 @@ public class ContratoService {
     }
     public ContratoExibirDTO criarContrato(ContratoCreateDTO contratoCreateDTO) {
         String cnpjSanitizado = empresaService.sanitizarCnpj(contratoCreateDTO.cnpj());
-        System.out.println(cnpjSanitizado);
-        Optional<Empresa> empresa = empresaRepository.findByCnpj(cnpjSanitizado);
-        if (empresa.isEmpty()) {
-            throw new EntityNotFoundException("Empresa não existente com esse CNPJ");
-        }
+        Empresa empresa = empresaRepository.findByCnpj(cnpjSanitizado)
+                .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada"));
+
 
         Contrato contrato = contratoMapper.createDtoToEntity(contratoCreateDTO);
-        contrato.setEmpresa(empresa.get());
-        contrato.setStatus(StatusContrato.PENDENTE);
-
+        contrato.setEmpresa(empresa);
         contratoRepository.save(contrato);
         return new ContratoExibirDTO(
                 contrato.getId(),
@@ -82,10 +79,9 @@ public class ContratoService {
                 contrato.getStatus(),
                 contrato.getValor(),
                 contrato.getDescricao(),
-                contrato.getTipo()
+                contrato.getTipo(),
+                contrato.getNomeResponsavel()
         );
-
-
     }
 
     public void deletar(Long id) {

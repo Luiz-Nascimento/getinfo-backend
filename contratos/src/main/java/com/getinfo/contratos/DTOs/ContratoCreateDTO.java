@@ -11,7 +11,8 @@ public record ContratoCreateDTO(
     String descricao,
     TipoContrato tipo,
     LocalDate dataInicio,
-    LocalDate dataFim
+    LocalDate dataFim,
+    String nomeResponsavel
     )
 {
 
