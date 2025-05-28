@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/contratos")
@@ -44,6 +45,14 @@ public class ContratoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(contratoService.criarContrato(contratoCreateDTO));
 
     }
+
+    @PostMapping("/{contratoId}/colaboradores")
+    public ResponseEntity<Void> adicionarColabores(@PathVariable Long contratoId
+            , @RequestBody Set<Long> idColaboradores) {
+        contratoService.adicionarColaboradores(contratoId, idColaboradores);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @PatchMapping("/ativar/{id}")
     public ResponseEntity<Void> ativarContrato(@PathVariable Long id) {
