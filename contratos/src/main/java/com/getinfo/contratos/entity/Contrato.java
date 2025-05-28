@@ -42,11 +42,13 @@ public class Contrato {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private StatusContrato status;
+    private StatusContrato status = StatusContrato.PENDENTE;
 
     @NotNull
     @DecimalMin("0.0")
     private BigDecimal valor;
+
+    private String nomeResponsavel;
 
     @NotBlank
     @Size(max = 255)
