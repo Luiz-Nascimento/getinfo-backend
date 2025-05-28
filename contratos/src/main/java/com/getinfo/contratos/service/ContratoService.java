@@ -14,8 +14,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,10 +36,6 @@ public class ContratoService {
     private ContratoMapper contratoMapper;
 
 
-    public List<Contrato> listarTodas() {
-        return contratoRepository.findAll();
-    }
-
     public List<ContratoExibirDTO> listarContratos() {
         List<ContratoExibirDTO> contratoExibirDTOS = new ArrayList<>();
         for (Contrato contrato:  contratoRepository.findAll()) {
@@ -55,14 +53,14 @@ public class ContratoService {
         return contratoExibirDTOS;
     }
 
-
-    public Optional<Contrato> buscarPorId(Long id) {
-        return contratoRepository.findById(id);
+    public byte[] obterAnexo(Long id) {
+        Contrato contrato = contratoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
+        byte[] anexo = contrato.getAnexo();
+        return anexo;
     }
 
-    public Contrato salvar(Contrato contrato) {
-        return contratoRepository.save(contrato);
-    }
+
     public ContratoExibirDTO criarContrato(ContratoCreateDTO contratoCreateDTO) {
         String cnpjSanitizado = empresaService.sanitizarCnpj(contratoCreateDTO.cnpj());
         Empresa empresa = empresaRepository.findByCnpj(cnpjSanitizado)
@@ -86,6 +84,25 @@ public class ContratoService {
 
     public void deletar(Long id) {
         contratoRepository.deleteById(id);
+    }
+
+
+
+    @Transactional
+    public void atualizarAnexo(Long id, MultipartFile anexo) {
+        Contrato contrato = contratoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
+
+        if (anexo == null || anexo.isEmpty()) {
+            throw new IllegalArgumentException("Arquivo não enviado ou está vazio");
+        }
+
+        try {
+            contrato.setAnexo(anexo.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao ler o arquivo enviado", e);
+        }
+
     }
     @Transactional
     public void arquivar(Long id) {
