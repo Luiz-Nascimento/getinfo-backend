@@ -1,5 +1,6 @@
 package com.getinfo.contratos.controller;
 
+import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
 import com.getinfo.contratos.DTOs.ContratoCreateDTO;
 import com.getinfo.contratos.DTOs.ContratoExibirDTO;
 import com.getinfo.contratos.repository.ContratoRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/contratos")
@@ -25,6 +27,17 @@ public class ContratoController {
     @GetMapping
     public List<ContratoExibirDTO> listarContratos() {
         return contratoService.listarContratos();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ContratoExibirDTO> buscarPorId(@PathVariable Long id) {
+        ContratoExibirDTO contrato = contratoService.buscarPorId(id);
+        return ResponseEntity.ok().body(contrato);
+    }
+
+    @GetMapping("/agregados/{id}")
+    public List<ColaboradorExibirDTO> exibirAgregados(@PathVariable Long id) {
+        return contratoService.exibirAgregados(id);
     }
 
     @GetMapping("/download/{id}")
@@ -39,11 +52,20 @@ public class ContratoController {
                 .body(anexo);
     }
 
+
     @PostMapping
     public ResponseEntity<ContratoExibirDTO> criarContrato(@RequestBody ContratoCreateDTO contratoCreateDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(contratoService.criarContrato(contratoCreateDTO));
 
     }
+
+    @PostMapping("/{contratoId}/colaboradores")
+    public ResponseEntity<Void> adicionarColabores(@PathVariable Long contratoId
+            , @RequestBody Set<Long> idColaboradores) {
+        contratoService.adicionarColaboradores(contratoId, idColaboradores);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @PatchMapping("/ativar/{id}")
     public ResponseEntity<Void> ativarContrato(@PathVariable Long id) {
