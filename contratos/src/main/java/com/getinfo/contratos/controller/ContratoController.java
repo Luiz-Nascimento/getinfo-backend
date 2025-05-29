@@ -51,7 +51,7 @@ public class ContratoController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(anexo);
     }
-    
+
 
     @PostMapping
     public ResponseEntity<ContratoExibirDTO> criarContrato(@RequestBody ContratoCreateDTO contratoCreateDTO) {

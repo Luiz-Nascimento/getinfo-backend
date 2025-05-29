@@ -50,11 +50,13 @@ public class ContratoService {
             contratoExibirDTOS.add(new ContratoExibirDTO(
                     contrato.getId(),
                     contrato.getEmpresa().getNomeFantasia(),
-                    contrato.getEmpresa().getCnpj(),// pega só o nome fantasia da empresa
+                    contrato.getEmpresa().getCnpj(),
                     contrato.getStatus(),
                     contrato.getValor(),
                     contrato.getDescricao(),
                     contrato.getTipo(),
+                    contrato.getDataInicio(),
+                    contrato.getDataFim(),
                     contrato.getNomeResponsavel()
             ));
         }
@@ -101,6 +103,8 @@ public class ContratoService {
                 contrato.getValor(),
                 contrato.getDescricao(),
                 contrato.getTipo(),
+                contrato.getDataInicio(),
+                contrato.getDataFim(),
                 contrato.getNomeResponsavel()
         );
     }
