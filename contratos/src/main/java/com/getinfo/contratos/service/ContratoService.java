@@ -1,6 +1,7 @@
 package com.getinfo.contratos.service;
 
 
+import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
 import com.getinfo.contratos.DTOs.ContratoCreateDTO;
 import com.getinfo.contratos.DTOs.ContratoExibirDTO;
 import com.getinfo.contratos.entity.Colaborador;
@@ -8,6 +9,7 @@ import com.getinfo.contratos.entity.Contrato;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.enums.ColaboradorStatus;
 import com.getinfo.contratos.enums.StatusContrato;
+import com.getinfo.contratos.mappers.ColaboradorMapper;
 import com.getinfo.contratos.mappers.ContratoMapper;
 import com.getinfo.contratos.repository.ColaboradorRepository;
 import com.getinfo.contratos.repository.ContratoRepository;
@@ -38,6 +40,8 @@ public class ContratoService {
     private ContratoMapper contratoMapper;
     @Autowired
     private ColaboradorRepository colaboradorRepository;
+    @Autowired
+    private ColaboradorMapper colaboradorMapper;
 
 
     public List<ContratoExibirDTO> listarContratos() {
@@ -55,6 +59,21 @@ public class ContratoService {
             ));
         }
         return contratoExibirDTOS;
+    }
+    public ContratoExibirDTO buscarPorId(Long id) {
+        Contrato contrato = contratoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado!"));
+        return contratoMapper.entityToDTO(contrato);
+    }
+
+    public List<ColaboradorExibirDTO> exibirAgregados(Long id) {
+        Contrato contrato = contratoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
+        List<ColaboradorExibirDTO> colaboradorExibir = new ArrayList<>();
+        for (Colaborador colaborador: contrato.getColaboradores()) {
+            colaboradorExibir.add(colaboradorMapper.entityToExibirDTO(colaborador));
+        }
+        return colaboradorExibir;
     }
 
     public byte[] obterAnexo(Long id) {

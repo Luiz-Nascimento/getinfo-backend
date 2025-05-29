@@ -1,5 +1,6 @@
 package com.getinfo.contratos.controller;
 
+import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
 import com.getinfo.contratos.DTOs.ContratoCreateDTO;
 import com.getinfo.contratos.DTOs.ContratoExibirDTO;
 import com.getinfo.contratos.repository.ContratoRepository;
@@ -28,6 +29,17 @@ public class ContratoController {
         return contratoService.listarContratos();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ContratoExibirDTO> buscarPorId(@PathVariable Long id) {
+        ContratoExibirDTO contrato = contratoService.buscarPorId(id);
+        return ResponseEntity.ok().body(contrato);
+    }
+
+    @GetMapping("/agregados/{id}")
+    public List<ColaboradorExibirDTO> exibirAgregados(@PathVariable Long id) {
+        return contratoService.exibirAgregados(id);
+    }
+
     @GetMapping("/download/{id}")
     public ResponseEntity<byte[]> downloadAnexo(@PathVariable Long id) {
         byte[] anexo = contratoService.obterAnexo(id);
@@ -39,6 +51,7 @@ public class ContratoController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(anexo);
     }
+    
 
     @PostMapping
     public ResponseEntity<ContratoExibirDTO> criarContrato(@RequestBody ContratoCreateDTO contratoCreateDTO) {
