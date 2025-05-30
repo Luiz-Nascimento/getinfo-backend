@@ -30,6 +30,8 @@ public record ContratoCreateDTO(
 
         @NotNull(message = "A data de fim é obrigatória")
         @Future(message = "A data de fim deve ser no futuro")
-        LocalDate dataFim
+        LocalDate dataFim,
 
+        @NotBlank(message= "Nome do responsável é obrigatório")
+        String nomeResponsavel
 ) {}
