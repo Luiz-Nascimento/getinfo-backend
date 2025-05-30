@@ -51,6 +51,12 @@ public class ColaboradorService {
         Optional<Colaborador> colaboradorOpt = buscarPorId(id);
         if (colaboradorOpt.isPresent()) {
             Colaborador colaborador = colaboradorOpt.get();
+            if (colaboradorPatchDTO.nome() != null) {
+                colaborador.setNome(colaboradorPatchDTO.nome());
+            }
+            if (colaboradorPatchDTO.sobrenome() != null) {
+                colaborador.setSobrenome(colaboradorPatchDTO.sobrenome());
+            }
             if (colaboradorPatchDTO.email() != null) {
                 colaborador.setEmail(colaboradorPatchDTO.email());
             }

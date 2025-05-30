@@ -6,6 +6,10 @@ import jakarta.validation.constraints.Size;
 
 public record ColaboradorPatchDTO(
 
+        @Size(min = 2, max = 50, message = "O campo nome deve ter entre 2 e 50 caracteres")
+        String nome,
+        @Size(min = 2, max = 50, message = "O campo sobrenome deve ter entre 2 e 50 caracteres")
+        String sobrenome,
         @Email(message = "E-mail em formato inválido")
         String email,
 
