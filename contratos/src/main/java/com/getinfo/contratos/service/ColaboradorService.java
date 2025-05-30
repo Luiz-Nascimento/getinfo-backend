@@ -71,10 +71,10 @@ public class ColaboradorService {
     public void desativar(Long id) {
         Colaborador colaborador = colaboradorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Colaborador não encontrado"));
-        if (colaborador.getStatus().equals(ColaboradorStatus.DESLIGADO)) {
+        if (colaborador.getStatus().equals(ColaboradorStatus.INATIVO)) {
             throw new IllegalStateException("Colaborador já está desligado.");
         }
-        colaborador.setStatus(ColaboradorStatus.DESLIGADO);
+        colaborador.setStatus(ColaboradorStatus.INATIVO);
     }
 
 
