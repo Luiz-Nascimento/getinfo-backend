@@ -13,16 +13,24 @@ public class Entregavel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_contrato", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contrato_id", nullable = false)
     private Contrato contrato;
 
-    private StatusEntregavel status;
-    private String descricao;
-    private String observacao;
-    private String just_canc;
-    private LocalDate data_canc;
-    private LocalDate data_inicial;
-    private LocalDate data_entrega;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusEntregavel status = StatusEntregavel.PENDENTE;
 
+    @Column(nullable = false)
+    private String descricao;
+
+    private String observacao;
+
+    private String justificativaCancelamento;
+
+    private LocalDate dataCancelamento;
+
+    private LocalDate dataFinal;
+
+    private LocalDate dataEntrega;
 }

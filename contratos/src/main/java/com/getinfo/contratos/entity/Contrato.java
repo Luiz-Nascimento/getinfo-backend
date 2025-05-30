@@ -40,6 +40,9 @@ public class Contrato {
     )
     private Set<Colaborador> colaboradores = new HashSet<>();
 
+    @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Entregavel> entregaveis = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     @NotNull
     private StatusContrato status = StatusContrato.PENDENTE;
