@@ -7,6 +7,7 @@ import com.getinfo.contratos.entity.Colaborador;
 import com.getinfo.contratos.mappers.ColaboradorMapper;
 import com.getinfo.contratos.repository.ColaboradorRepository;
 import com.getinfo.contratos.service.ColaboradorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class ColaboradorController {
     }
 
     @PostMapping
-    public ResponseEntity<ColaboradorExibirDTO> salvar(@RequestBody ColaboradorCreateDTO colaboradorCreateDTO) {
+    public ResponseEntity<ColaboradorExibirDTO> salvar(@RequestBody @Valid ColaboradorCreateDTO colaboradorCreateDTO) {
         Colaborador colaborador = colaboradorService.CreateDTOtoEntity(colaboradorCreateDTO);
         colaboradorService.salvar(colaborador);
         ColaboradorExibirDTO response = colaboradorService.entityToExibirDTO(colaborador);
@@ -46,7 +47,7 @@ public class ColaboradorController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ColaboradorExibirDTO> atualizarParcial(@PathVariable Long id, @RequestBody ColaboradorPatchDTO colaboradorAtualizar) {
+    public ResponseEntity<ColaboradorExibirDTO> atualizarParcial(@PathVariable Long id, @RequestBody @Valid ColaboradorPatchDTO colaboradorAtualizar) {
         ColaboradorExibirDTO colaboradorAtualizado = colaboradorService.atualizarParcial(id, colaboradorAtualizar);
         if (colaboradorAtualizado != null) {
             return ResponseEntity.status(HttpStatus.OK).body(colaboradorAtualizado);
