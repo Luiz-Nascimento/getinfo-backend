@@ -45,7 +45,7 @@ public class Contrato {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private StatusContrato status = StatusContrato.PENDENTE;
+    private StatusContrato status = StatusContrato.ATIVO;
 
     @NotNull
     @DecimalMin("0.0")
