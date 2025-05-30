@@ -70,7 +70,19 @@ public class ContratoService {
     public ContratoExibirDTO buscarPorId(Long id) {
         Contrato contrato = contratoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado!"));
-        return contratoMapper.entityToDTO(contrato);
+        ContratoExibirDTO contratoExibirDTO = new ContratoExibirDTO(
+                contrato.getId(),
+                contrato.getEmpresa().getNomeFantasia(),
+                contrato.getEmpresa().getCnpj(),
+                contrato.getStatus(),
+                contrato.getValor(),
+                contrato.getDescricao(),
+                contrato.getTipo(),
+                contrato.getDataInicio(),
+                contrato.getDataFim(),
+                contrato.getNomeResponsavel()
+        );
+        return contratoExibirDTO;
     }
 
     public List<ColaboradorExibirDTO> exibirAgregados(Long id) {
