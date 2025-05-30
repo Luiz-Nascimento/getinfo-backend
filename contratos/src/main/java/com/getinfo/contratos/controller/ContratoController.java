@@ -3,6 +3,7 @@ package com.getinfo.contratos.controller;
 import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
 import com.getinfo.contratos.DTOs.ContratoCreateDTO;
 import com.getinfo.contratos.DTOs.ContratoExibirDTO;
+import com.getinfo.contratos.DTOs.EntregavelExibirDTO;
 import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.service.ContratoService;
 import jakarta.validation.Valid;
@@ -39,6 +40,11 @@ public class ContratoController {
     @GetMapping("/agregados/{id}")
     public List<ColaboradorExibirDTO> exibirAgregados(@PathVariable Long id) {
         return contratoService.exibirAgregados(id);
+    }
+
+    @GetMapping("/entregaveis/{id}")
+    public List<EntregavelExibirDTO> exibirEntregaveis(@PathVariable Long id) {
+        return contratoService.exibirEntregaveis(id);
     }
 
     @GetMapping("/download/{id}")

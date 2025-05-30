@@ -4,13 +4,16 @@ package com.getinfo.contratos.service;
 import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
 import com.getinfo.contratos.DTOs.ContratoCreateDTO;
 import com.getinfo.contratos.DTOs.ContratoExibirDTO;
+import com.getinfo.contratos.DTOs.EntregavelExibirDTO;
 import com.getinfo.contratos.entity.Colaborador;
 import com.getinfo.contratos.entity.Contrato;
 import com.getinfo.contratos.entity.Empresa;
+import com.getinfo.contratos.entity.Entregavel;
 import com.getinfo.contratos.enums.ColaboradorStatus;
 import com.getinfo.contratos.enums.StatusContrato;
 import com.getinfo.contratos.mappers.ColaboradorMapper;
 import com.getinfo.contratos.mappers.ContratoMapper;
+import com.getinfo.contratos.mappers.EntregavelMapper;
 import com.getinfo.contratos.repository.ColaboradorRepository;
 import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.repository.EmpresaRepository;
@@ -42,6 +45,8 @@ public class ContratoService {
     private ColaboradorRepository colaboradorRepository;
     @Autowired
     private ColaboradorMapper colaboradorMapper;
+    @Autowired
+    private EntregavelMapper entregavelMapper;
 
 
     public List<ContratoExibirDTO> listarContratos() {
@@ -76,6 +81,16 @@ public class ContratoService {
             colaboradorExibir.add(colaboradorMapper.entityToExibirDTO(colaborador));
         }
         return colaboradorExibir;
+    }
+
+    public List<EntregavelExibirDTO> exibirEntregaveis(Long id) {
+        Contrato contrato = contratoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
+        List<EntregavelExibirDTO> entregaveisExibir = new ArrayList<>();
+        for (Entregavel entregavel: contrato.getEntregaveis()) {
+            entregaveisExibir.add(entregavelMapper.toDto(entregavel));
+        }
+        return entregaveisExibir;
     }
 
     public byte[] obterAnexo(Long id) {
