@@ -40,6 +40,13 @@ public class Contrato {
     )
     private Set<Colaborador> colaboradores = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "contrato",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<ColaboradorContrato> colaboradoresContrato = new HashSet<>();
+
     @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Entregavel> entregaveis = new HashSet<>();
 

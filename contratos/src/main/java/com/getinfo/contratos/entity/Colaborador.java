@@ -17,6 +17,13 @@ public class Colaborador {
     @ManyToMany(mappedBy = "colaboradores")
     private Set<Contrato> contratos = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "colaborador",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<ColaboradorContrato> agregados = new HashSet<>();
+
     private String nome;
     private String sobrenome;
     private ColaboradorStatus status;
