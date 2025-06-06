@@ -1,5 +1,6 @@
 package com.getinfo.contratos.controller;
 
+import com.getinfo.contratos.DTOs.ContratoExibirDTO;
 import com.getinfo.contratos.DTOs.EmpresaCreateDTO;
 import com.getinfo.contratos.DTOs.EmpresaExibirDTO;
 import com.getinfo.contratos.DTOs.EmpresaPatchDTO;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/empresas")
@@ -43,6 +45,11 @@ public class EmpresaController {
             return ResponseEntity.ok(empresaExibirDTO.get());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/contratos/{id}")
+    public Set<ContratoExibirDTO> exibirContratos(Long id) {
+        return empresaService.listarContratos(id);
     }
 
     @PostMapping

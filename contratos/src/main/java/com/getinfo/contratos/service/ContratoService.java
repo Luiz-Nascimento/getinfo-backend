@@ -88,15 +88,14 @@ public class ContratoService {
         return anexo;
     }
 
-
+    @Transactional
     public ContratoExibirDTO criarContrato(ContratoCreateDTO contratoCreateDTO) {
         String cnpjSanitizado = empresaService.sanitizarCnpj(contratoCreateDTO.cnpj());
         Empresa empresa = empresaRepository.findByCnpj(cnpjSanitizado)
                 .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada"));
-
-
         Contrato contrato = contratoMapper.createDtoToEntity(contratoCreateDTO, empresa);
         contratoRepository.save(contrato);
+        empresa.getContratos().add(contrato);
         return  contratoMapper.entityToDTO(contrato);
     }
 

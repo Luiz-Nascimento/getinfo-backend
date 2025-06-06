@@ -1,9 +1,12 @@
 package com.getinfo.contratos.service;
 
+import com.getinfo.contratos.DTOs.ContratoExibirDTO;
 import com.getinfo.contratos.DTOs.EmpresaCreateDTO;
 import com.getinfo.contratos.DTOs.EmpresaExibirDTO;
 import com.getinfo.contratos.DTOs.EmpresaPatchDTO;
+import com.getinfo.contratos.entity.Contrato;
 import com.getinfo.contratos.entity.Empresa;
+import com.getinfo.contratos.mappers.ContratoMapper;
 import com.getinfo.contratos.mappers.EmpresaMapper;
 import com.getinfo.contratos.repository.EmpresaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EmpresaService {
@@ -24,6 +25,9 @@ public class EmpresaService {
 
     @Autowired
     private EmpresaMapper empresaMapper;
+
+    @Autowired
+    private ContratoMapper contratoMapper;
 
     public List<Empresa> listarTodas() {
         return empresaRepository.findAll();
@@ -42,8 +46,14 @@ public class EmpresaService {
         return empresaRepository.findById(id);
     }
 
-    public Optional<Empresa> buscarPorCnpj(String cnpj) {
-        return empresaRepository.findByCnpj(cnpj);
+    public Set<ContratoExibirDTO> listarContratos(Long idEmpresa) {
+        Empresa empresa = empresaRepository.findById(idEmpresa)
+                .orElseThrow(()-> new EntityNotFoundException("Empresa não encontrada"));
+        Set<ContratoExibirDTO> contratos = new HashSet<>();
+        for (Contrato contrato: empresa.getContratos()) {
+            contratos.add(contratoMapper.entityToDTO(contrato));
+        }
+        return contratos;
     }
 
     public String sanitizarCnpj(String cnpj) {
