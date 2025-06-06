@@ -55,37 +55,13 @@ public class ContratoService {
     public List<ContratoExibirDTO> listarContratos() {
         List<ContratoExibirDTO> contratoExibirDTOS = new ArrayList<>();
         for (Contrato contrato:  contratoRepository.findAll()) {
-            contratoExibirDTOS.add(new ContratoExibirDTO(
-                    contrato.getId(),
-                    contrato.getEmpresa().getNomeFantasia(),
-                    contrato.getEmpresa().getCnpj(),
-                    contrato.getStatus(),
-                    contrato.getValor(),
-                    contrato.getDescricao(),
-                    contrato.getTipo(),
-                    contrato.getDataInicio(),
-                    contrato.getDataFim(),
-                    contrato.getNomeResponsavel()
-            ));
+            contratoExibirDTOS.add(contratoMapper.entityToDTO(contrato));
         }
         return contratoExibirDTOS;
     }
     public ContratoExibirDTO buscarPorId(Long id) {
-        Contrato contrato = contratoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado!"));
-        ContratoExibirDTO contratoExibirDTO = new ContratoExibirDTO(
-                contrato.getId(),
-                contrato.getEmpresa().getNomeFantasia(),
-                contrato.getEmpresa().getCnpj(),
-                contrato.getStatus(),
-                contrato.getValor(),
-                contrato.getDescricao(),
-                contrato.getTipo(),
-                contrato.getDataInicio(),
-                contrato.getDataFim(),
-                contrato.getNomeResponsavel()
-        );
-        return contratoExibirDTO;
+        Contrato contrato = acharPorId(id);
+        return contratoMapper.entityToDTO(contrato);
     }
 
     public Set<AgregadoExibirDTO> exibirAgregados(Long contratoId) {

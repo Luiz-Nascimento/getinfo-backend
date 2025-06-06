@@ -16,5 +16,12 @@ public interface ContratoMapper {
     void patchContratoFromDto(ContratoPatchDTO dto, @MappingTarget Contrato entity);
 
 
+    /**
+     * Converte uma entidade Contrato para um ContratoExibirDTO.
+     * Mapeia os campos aninhados da Empresa para os campos do DTO.
+     */
+    @Mapping(source = "empresa.nomeFantasia", target = "nomeFantasia")
+    @Mapping(source = "empresa.cnpj", target = "cnpj")
+    @Mapping(source = "status", target = "statusContrato") // Mapeia status para statusContrato
     ContratoExibirDTO entityToDTO(Contrato contrato);
 }
