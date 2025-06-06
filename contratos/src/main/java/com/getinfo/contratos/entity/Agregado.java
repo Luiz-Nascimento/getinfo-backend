@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-public class ColaboradorContrato {
+public class Agregado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +21,10 @@ public class ColaboradorContrato {
 
     private String cargoContrato;
 
-    public ColaboradorContrato() {
+    public Agregado() {
     }
 
-    public ColaboradorContrato(Long id, Contrato contrato, Colaborador colaborador, String cargoContrato) {
+    public Agregado(Long id, Contrato contrato, Colaborador colaborador, String cargoContrato) {
         this.id = id;
         this.contrato = contrato;
         this.colaborador = colaborador;
@@ -58,4 +58,5 @@ public class ColaboradorContrato {
     public void setCargoContrato(String cargoContrato) {
         this.cargoContrato = cargoContrato;
     }
+
 }

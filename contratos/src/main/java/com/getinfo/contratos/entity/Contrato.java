@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLRestriction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -45,7 +44,7 @@ public class Contrato {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<ColaboradorContrato> colaboradoresContrato = new HashSet<>();
+    private Set<Agregado> colaboradoresContrato = new HashSet<>();
 
     @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Entregavel> entregaveis = new HashSet<>();

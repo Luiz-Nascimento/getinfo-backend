@@ -22,7 +22,7 @@ public class Colaborador {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<ColaboradorContrato> agregados = new HashSet<>();
+    private Set<Agregado> agregados = new HashSet<>();
 
     private String nome;
     private String sobrenome;
