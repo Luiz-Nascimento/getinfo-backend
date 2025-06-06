@@ -95,21 +95,9 @@ public class ContratoService {
                 .orElseThrow(() -> new EntityNotFoundException("Empresa não encontrada"));
 
 
-        Contrato contrato = contratoMapper.createDtoToEntity(contratoCreateDTO);
-        contrato.setEmpresa(empresa);
+        Contrato contrato = contratoMapper.createDtoToEntity(contratoCreateDTO, empresa);
         contratoRepository.save(contrato);
-        return new ContratoExibirDTO(
-                contrato.getId(),
-                contrato.getEmpresa().getNomeFantasia(),
-                contrato.getEmpresa().getCnpj(),// pega só o nome fantasia da empresa
-                contrato.getStatus(),
-                contrato.getValor(),
-                contrato.getDescricao(),
-                contrato.getTipo(),
-                contrato.getDataInicio(),
-                contrato.getDataFim(),
-                contrato.getNomeResponsavel()
-        );
+        return  contratoMapper.entityToDTO(contrato);
     }
 
     @Transactional
