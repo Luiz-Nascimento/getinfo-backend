@@ -5,7 +5,6 @@ import com.getinfo.contratos.DTOs.EmpresaExibirDTO;
 import com.getinfo.contratos.DTOs.EmpresaPatchDTO;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.mappers.EmpresaMapper;
-import com.getinfo.contratos.mappers.EmpresaMapperImpl;
 import com.getinfo.contratos.repository.EmpresaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -25,8 +24,6 @@ public class EmpresaService {
 
     @Autowired
     private EmpresaMapper empresaMapper;
-    @Autowired
-    private EmpresaMapperImpl empresaMapperImpl;
 
     public List<Empresa> listarTodas() {
         return empresaRepository.findAll();

@@ -47,6 +47,10 @@ public class ContratoService {
     @Autowired
     private AgregadoMapper agregadoMapper;
 
+    public Contrato acharPorId(Long id) {
+        return contratoRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Contrato não encontrado"));
+    }
 
     public List<ContratoExibirDTO> listarContratos() {
         List<ContratoExibirDTO> contratoExibirDTOS = new ArrayList<>();
@@ -132,6 +136,14 @@ public class ContratoService {
         );
     }
 
+    @Transactional
+    public ContratoExibirDTO editarContrato(Long id, ContratoPatchDTO contratoPatchDTO) {
+        Contrato contrato = acharPorId(id);
+        contratoMapper.patchContratoFromDto(contratoPatchDTO, contrato);
+        contratoRepository.save(contrato);
+        return contratoMapper.entityToDTO(contrato);
+    }
+
     public void deletar(Long id) {
         contratoRepository.deleteById(id);
     }
@@ -158,29 +170,6 @@ public class ContratoService {
 
     }
 
-    @Transactional
-    public void adicionarColaboradores(Long contratoId, Set<Long> idColaboradores) {
-        Contrato contrato = contratoRepository.findById(contratoId)
-                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
-
-        Set<Colaborador> colaboradoresParaAdd = new HashSet<>(colaboradorRepository.findAllById(idColaboradores));
-
-        Set<Long> encontrados = colaboradoresParaAdd.stream()
-                .map(Colaborador::getId)
-                .collect(Collectors.toSet());
-        Set<Long> naoEncontrados = new HashSet<>(idColaboradores);
-        naoEncontrados.removeAll(encontrados);
-
-        if (!naoEncontrados.isEmpty()) {
-            throw new EntityNotFoundException("Colaboradores não encontrados: " + naoEncontrados);
-        }
-
-
-        for (Colaborador colaborador: colaboradoresParaAdd) {
-            contrato.getColaboradores().add(colaborador);
-            colaborador.getContratos().add(contrato);
-        }
-    }
     @Transactional
     public void adicionarAgregado(AgregadoCreateDTO agregadoCreateDTO) {
         Colaborador colaborador = colaboradorRepository.findById(agregadoCreateDTO.idColaborador())
