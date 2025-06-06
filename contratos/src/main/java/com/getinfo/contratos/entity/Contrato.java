@@ -44,7 +44,7 @@ public class Contrato {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<Agregado> colaboradoresContrato = new HashSet<>();
+    private Set<Agregado> agregados = new HashSet<>();
 
     @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Entregavel> entregaveis = new HashSet<>();
