@@ -1,25 +1,20 @@
 package com.getinfo.contratos.service;
 
 
-import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
-import com.getinfo.contratos.DTOs.ContratoCreateDTO;
-import com.getinfo.contratos.DTOs.ContratoExibirDTO;
-import com.getinfo.contratos.DTOs.EntregavelExibirDTO;
-import com.getinfo.contratos.entity.Colaborador;
-import com.getinfo.contratos.entity.Contrato;
-import com.getinfo.contratos.entity.Empresa;
-import com.getinfo.contratos.entity.Entregavel;
-import com.getinfo.contratos.enums.ColaboradorStatus;
+import com.getinfo.contratos.DTOs.*;
+import com.getinfo.contratos.entity.*;
 import com.getinfo.contratos.enums.StatusContrato;
+import com.getinfo.contratos.mappers.AgregadoMapper;
 import com.getinfo.contratos.mappers.ColaboradorMapper;
 import com.getinfo.contratos.mappers.ContratoMapper;
 import com.getinfo.contratos.mappers.EntregavelMapper;
+import com.getinfo.contratos.repository.AgregadoRepository;
 import com.getinfo.contratos.repository.ColaboradorRepository;
 import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.repository.EmpresaRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +35,8 @@ public class ContratoService {
     private EmpresaRepository empresaRepository;
 
     @Autowired
+    private AgregadoRepository agregadoRepository;
+    @Autowired
     private ContratoMapper contratoMapper;
     @Autowired
     private ColaboradorRepository colaboradorRepository;
@@ -47,6 +44,8 @@ public class ContratoService {
     private ColaboradorMapper colaboradorMapper;
     @Autowired
     private EntregavelMapper entregavelMapper;
+    @Autowired
+    private AgregadoMapper agregadoMapper;
 
 
     public List<ContratoExibirDTO> listarContratos() {
@@ -85,14 +84,11 @@ public class ContratoService {
         return contratoExibirDTO;
     }
 
-    public List<ColaboradorExibirDTO> exibirAgregados(Long id) {
-        Contrato contrato = contratoRepository.findById(id)
+    public Set<AgregadoExibirDTO> exibirAgregados(Long contratoId) {
+        Contrato contrato = contratoRepository.findById(contratoId)
                 .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
-        List<ColaboradorExibirDTO> colaboradorExibir = new ArrayList<>();
-        for (Colaborador colaborador: contrato.getColaboradores()) {
-            colaboradorExibir.add(colaboradorMapper.entityToExibirDTO(colaborador));
-        }
-        return colaboradorExibir;
+        return agregadoMapper.toExibirDTOSet(contrato.getAgregados());
+
     }
 
     public List<EntregavelExibirDTO> exibirEntregaveis(Long id) {
@@ -184,6 +180,21 @@ public class ContratoService {
             contrato.getColaboradores().add(colaborador);
             colaborador.getContratos().add(contrato);
         }
+    }
+    @Transactional
+    public void adicionarAgregado(AgregadoCreateDTO agregadoCreateDTO) {
+        Colaborador colaborador = colaboradorRepository.findById(agregadoCreateDTO.idColaborador())
+                .orElseThrow(() -> new EntityNotFoundException("Colaborador não encontrado"));
+        Contrato contrato = contratoRepository.findById(agregadoCreateDTO.idContrato())
+                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
+
+        Agregado agregado = new Agregado();
+        agregado.setCargoContrato(agregadoCreateDTO.cargoContrato());
+        agregado.setColaborador(colaborador);
+        agregado.setContrato(contrato);
+        contrato.adicionarAgregado(agregado);
+        colaborador.adicionarAgregado(agregado);
+        agregadoRepository.save(agregado);
     }
 
 

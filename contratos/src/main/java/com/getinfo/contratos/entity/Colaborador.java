@@ -17,6 +17,13 @@ public class Colaborador {
     @ManyToMany(mappedBy = "colaboradores")
     private Set<Contrato> contratos = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "colaborador",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<Agregado> agregados = new HashSet<>();
+
     private String nome;
     private String sobrenome;
     private ColaboradorStatus status;
@@ -25,4 +32,7 @@ public class Colaborador {
     private String telefone;
     private String cargo;
 
+    public void adicionarAgregado(Agregado agregado) {
+        this.agregados.add(agregado);
+    }
 }

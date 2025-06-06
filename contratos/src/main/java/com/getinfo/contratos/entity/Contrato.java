@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.SQLRestriction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,6 +38,13 @@ public class Contrato {
             inverseJoinColumns = @JoinColumn(name = "colaborador_id")
     )
     private Set<Colaborador> colaboradores = new HashSet<>();
+
+    @OneToMany(
+            mappedBy = "contrato",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<Agregado> agregados = new HashSet<>();
 
     @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Entregavel> entregaveis = new HashSet<>();
@@ -69,4 +75,8 @@ public class Contrato {
 
     @NotNull
     private LocalDate dataFim;
+
+    public void adicionarAgregado(Agregado agregado) {
+        this.agregados.add(agregado);
+    }
 }
