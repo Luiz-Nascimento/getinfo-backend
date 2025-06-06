@@ -1,9 +1,6 @@
 package com.getinfo.contratos.controller;
 
-import com.getinfo.contratos.DTOs.ColaboradorExibirDTO;
-import com.getinfo.contratos.DTOs.ContratoCreateDTO;
-import com.getinfo.contratos.DTOs.ContratoExibirDTO;
-import com.getinfo.contratos.DTOs.EntregavelExibirDTO;
+import com.getinfo.contratos.DTOs.*;
 import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.service.ContratoService;
 import jakarta.validation.Valid;
@@ -38,7 +35,7 @@ public class ContratoController {
     }
 
     @GetMapping("/agregados/{id}")
-    public List<ColaboradorExibirDTO> exibirAgregados(@PathVariable Long id) {
+    public Set<AgregadoExibirDTO> listarAgregados(@PathVariable Long id) {
         return contratoService.exibirAgregados(id);
     }
 
@@ -66,10 +63,8 @@ public class ContratoController {
 
     }
 
-    @PostMapping("/{contratoId}/colaboradores")
-    public ResponseEntity<Void> adicionarColabores(@PathVariable Long contratoId
-            , @RequestBody Set<Long> idColaboradores) {
-        contratoService.adicionarColaboradores(contratoId, idColaboradores);
+    @PostMapping("/agregados/")
+    public ResponseEntity<Void> adicionarAgregado(@RequestBody AgregadoCreateDTO agregadoCreateDTO) {
         return ResponseEntity.noContent().build();
     }
 

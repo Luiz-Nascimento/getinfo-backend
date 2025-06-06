@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
-//@Profile("dev")
+@Profile("dev")
 public class ContratosApplication {
 
 	public static void main(String[] args) {

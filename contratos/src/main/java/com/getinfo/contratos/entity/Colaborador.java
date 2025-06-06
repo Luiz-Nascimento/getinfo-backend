@@ -32,4 +32,7 @@ public class Colaborador {
     private String telefone;
     private String cargo;
 
+    public void adicionarAgregado(Agregado agregado) {
+        this.agregados.add(agregado);
+    }
 }

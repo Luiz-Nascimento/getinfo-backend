@@ -75,4 +75,8 @@ public class Contrato {
 
     @NotNull
     private LocalDate dataFim;
+
+    public void adicionarAgregado(Agregado agregado) {
+        this.agregados.add(agregado);
+    }
 }
