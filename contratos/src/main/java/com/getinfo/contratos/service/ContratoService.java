@@ -69,6 +69,15 @@ public class ContratoService {
 
     }
 
+    public Set<AditivoExibirDTO> exibirAditivos(Long contratoId) {
+        Contrato contrato = acharPorId(contratoId);
+        Set<AditivoExibirDTO> aditivoExibirDTOS = new HashSet<>();
+        for (Aditivo aditivo: contrato.getAditivos()) {
+            aditivoExibirDTOS.add(aditivoMapper.entityToDto(aditivo));
+        }
+        return aditivoExibirDTOS;
+    }
+
     public List<EntregavelExibirDTO> exibirEntregaveis(Long id) {
         Contrato contrato = contratoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
@@ -161,7 +170,6 @@ public class ContratoService {
     }
 
 
-
     @Transactional
     public void arquivar(Long id) {
         Contrato contrato = contratoRepository.findById(id)
@@ -171,6 +179,7 @@ public class ContratoService {
         }
         contrato.setStatus(StatusContrato.ARQUIVADO);
     }
+
 
     @Transactional
     public void ativar(Long id) {

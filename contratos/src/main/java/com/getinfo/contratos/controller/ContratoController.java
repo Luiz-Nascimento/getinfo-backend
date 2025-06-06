@@ -39,6 +39,11 @@ public class ContratoController {
         return contratoService.exibirAgregados(id);
     }
 
+    @GetMapping("/aditivos/{id}")
+    public Set<AditivoExibirDTO> listarAditivos(@PathVariable Long id) {
+        return contratoService.exibirAditivos(id);
+    }
+
     @GetMapping("/entregaveis/{id}")
     public List<EntregavelExibirDTO> exibirEntregaveis(@PathVariable Long id) {
         return contratoService.exibirEntregaveis(id);
