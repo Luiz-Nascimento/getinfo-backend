@@ -4,14 +4,8 @@ package com.getinfo.contratos.service;
 import com.getinfo.contratos.DTOs.*;
 import com.getinfo.contratos.entity.*;
 import com.getinfo.contratos.enums.StatusContrato;
-import com.getinfo.contratos.mappers.AgregadoMapper;
-import com.getinfo.contratos.mappers.ColaboradorMapper;
-import com.getinfo.contratos.mappers.ContratoMapper;
-import com.getinfo.contratos.mappers.EntregavelMapper;
-import com.getinfo.contratos.repository.AgregadoRepository;
-import com.getinfo.contratos.repository.ColaboradorRepository;
-import com.getinfo.contratos.repository.ContratoRepository;
-import com.getinfo.contratos.repository.EmpresaRepository;
+import com.getinfo.contratos.mappers.*;
+import com.getinfo.contratos.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +40,10 @@ public class ContratoService {
     private EntregavelMapper entregavelMapper;
     @Autowired
     private AgregadoMapper agregadoMapper;
+    @Autowired
+    private AditivoMapper aditivoMapper;
+    @Autowired
+    private AditivoRepository aditivoRepository;
 
     public Contrato acharPorId(Long id) {
         return contratoRepository.findById(id)
@@ -148,6 +146,18 @@ public class ContratoService {
         contrato.adicionarAgregado(agregado);
         colaborador.adicionarAgregado(agregado);
         agregadoRepository.save(agregado);
+    }
+
+    @Transactional
+    public ContratoExibirDTO adicionarAditivo(AditivoCreateDTO aditivoCreateDTO) {
+        Contrato contrato = acharPorId(aditivoCreateDTO.idContrato());
+        Aditivo aditivo = aditivoMapper.createDtoToEntity(aditivoCreateDTO);
+        aditivo.setContrato(contrato);
+        contrato.getAditivos().add(aditivo);
+        contrato.setDataFim(contrato.getDataFim().plusDays(aditivo.getDiasAditivo()));
+        contrato.setValor(contrato.getValor().add(aditivo.getValorAditivo()));
+        aditivoRepository.save(aditivo);
+        return contratoMapper.entityToDTO(contrato);
     }
 
 

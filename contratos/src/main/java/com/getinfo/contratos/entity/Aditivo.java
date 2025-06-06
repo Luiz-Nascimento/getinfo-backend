@@ -1,26 +1,44 @@
 package com.getinfo.contratos.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.DecimalMin;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name = "aditivos")
 public class Aditivo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@ManyToOne
-    //@JoinColumn(name = "id_contrato", unique = true)
-    //private Contrato contrato;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_contrato", nullable = false)
+    private Contrato contrato;
 
-    private Integer tempoAditivo;
-    private LocalDate data_inicio;
-    private LocalDate data_fim;
+    @DecimalMin("0.0")
+    private BigDecimal valorAditivo;
+
+    private Long diasAditivo;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     private byte[] anexo;
     private String descricao;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "aditivo_entregaveis", // Tabela de junção para mapear a relação
+            joinColumns = @JoinColumn(name = "aditivo_id"), // Coluna que referencia o Aditivo na tabela de junção
+            inverseJoinColumns = @JoinColumn(name = "entregavel_id") // Coluna que referencia o Entregavel na tabela de junção
+    )
+    private Set<Entregavel> entregaveis = new HashSet<>();
 
 }

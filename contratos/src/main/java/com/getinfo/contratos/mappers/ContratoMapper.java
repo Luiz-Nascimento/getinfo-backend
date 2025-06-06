@@ -34,6 +34,5 @@ public interface ContratoMapper {
     @Mapping(source = "status", target = "statusContrato") // Mapeia status para statusContrato
     @Mapping(source = "nomeResponsavel", target = "nomeResponsavel")
     @Mapping(source = "tipo", target = "tipo")
-
     ContratoExibirDTO entityToDTO(Contrato contrato);
 }

@@ -69,6 +69,12 @@ public class ContratoController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/aditivos/")
+    public ResponseEntity<ContratoExibirDTO> aditivar(@RequestBody AditivoCreateDTO aditivoDTO) {
+        ContratoExibirDTO contratoAtualizado = contratoService.adicionarAditivo(aditivoDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(contratoAtualizado);
+    }
+
     @PatchMapping("/editar/{id}")
     public ResponseEntity<ContratoExibirDTO> editarContrato(@PathVariable Long id, @RequestBody ContratoPatchDTO contratoPatchDTO) {
         ContratoExibirDTO contratoExibirDTO = contratoService.editarContrato(id, contratoPatchDTO);

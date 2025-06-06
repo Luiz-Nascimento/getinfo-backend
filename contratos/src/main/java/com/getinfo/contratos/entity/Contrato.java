@@ -70,6 +70,15 @@ public class Contrato {
     @Basic(fetch = FetchType.LAZY)
     private byte[] anexo;
 
+    @OneToMany(
+            mappedBy = "contrato", // 'contrato' é o nome do campo na entidade Aditivo que mapeia este relacionamento
+            cascade = CascadeType.ALL, // Operações em Contrato (persist, remove) são propagadas para Aditivo
+            orphanRemoval = true,      // Aditivos sem contrato pai são removidos
+            fetch = FetchType.LAZY     // Aditivos são carregados apenas quando acessados
+    )
+    private Set<Aditivo> aditivos = new HashSet<>();
+
+
     @NotNull
     private LocalDate dataInicio;
 

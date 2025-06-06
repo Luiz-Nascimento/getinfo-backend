@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,6 +18,10 @@ public class Entregavel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contrato_id", nullable = false)
     private Contrato contrato;
+
+    @ManyToMany(mappedBy = "entregaveis", fetch = FetchType.LAZY)
+    private Set<Aditivo> aditivos = new HashSet<>();
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
