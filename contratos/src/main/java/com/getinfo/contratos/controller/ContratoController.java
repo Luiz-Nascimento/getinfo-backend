@@ -65,6 +65,7 @@ public class ContratoController {
 
     @PostMapping("/agregados/")
     public ResponseEntity<Void> adicionarAgregado(@RequestBody AgregadoCreateDTO agregadoCreateDTO) {
+        contratoService.adicionarAgregado(agregadoCreateDTO);
         return ResponseEntity.noContent().build();
     }
 
