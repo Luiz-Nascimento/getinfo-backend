@@ -7,6 +7,7 @@ import com.getinfo.contratos.entity.Colaborador;
 import com.getinfo.contratos.mappers.ColaboradorMapper;
 import com.getinfo.contratos.repository.ColaboradorRepository;
 import com.getinfo.contratos.service.ColaboradorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class ColaboradorController {
     @Autowired
     private ColaboradorMapper colaboradorMapper;
 
+    @Tag(name = "Colaborador", description = "Endpoints para colaborador")
     @GetMapping
     public List<ColaboradorExibirDTO> listarTodas() {
         return colaboradorService.listarDTOs();

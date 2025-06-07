@@ -7,6 +7,10 @@ import com.getinfo.contratos.DTOs.EmpresaPatchDTO;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.mappers.EmpresaMapper;
 import com.getinfo.contratos.service.EmpresaService;
+import io.swagger.v3.oas.annotations.OpenAPI31;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,17 +31,23 @@ public class EmpresaController {
     @Autowired
     private EmpresaMapper empresaMapper;
 
+    @Tag(name = "Empresa", description = "Endpoints para empresas")
+
+    @Operation(summary = "Lista todas empresas cadastradas")
     @GetMapping
     public List<EmpresaExibirDTO> listarTodas() {
         return empresaService.listAllPublic();
     }
 
+    @Operation(summary = "Lista empresa por id")
     @GetMapping("/id/{id}")
     public ResponseEntity<EmpresaExibirDTO> buscarPorId(@PathVariable Long id) {
         Optional<EmpresaExibirDTO> empresaPublicDTO = empresaService.buscarPorIdPublic(id);
         return empresaPublicDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Tag(name = "Empresa", description = "Endpoints para empresas")
+    @Operation(summary = "Lista empresa por CNPJ")
     @GetMapping("/cnpj/{cnpj}")
     public ResponseEntity<EmpresaExibirDTO> buscarPorCnpj(@RequestParam String cnpj) {
         Optional<EmpresaExibirDTO> empresaExibirDTO = empresaService.buscarPorCnpjDTO(cnpj);
@@ -47,11 +57,15 @@ public class EmpresaController {
         return ResponseEntity.notFound().build();
     }
 
+    @Tag(name = "Empresa", description = "Endpoints para empresas")
+    @Operation(summary = "Exibe contratos relacionado a uma empresa")
     @GetMapping("/contratos/{id}")
     public Set<ContratoExibirDTO> exibirContratos(Long id) {
         return empresaService.listarContratos(id);
     }
 
+    @Tag(name = "Empresa", description = "Endpoints para empresas")
+    @Operation(summary = "Criação de uma empresa")
     @PostMapping
     public ResponseEntity<EmpresaExibirDTO> salvar(@RequestBody @Valid EmpresaCreateDTO empresaDTO) {
         Empresa empresa = empresaService.toEntity(empresaDTO);
@@ -59,12 +73,16 @@ public class EmpresaController {
         EmpresaExibirDTO response = empresaMapper.entityToExibirDTO(empresa);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    @Tag(name = "Empresa", description = "Endpoints para empresas")
+    @Operation(summary = "Edição de uma empresa")
     @PatchMapping("/editar/{id}")
     public ResponseEntity<EmpresaExibirDTO> editar(@PathVariable Long id, @Valid @RequestBody EmpresaPatchDTO empresaPatchDTO) {
         EmpresaExibirDTO empresaExibirDTO = empresaService.editar(id, empresaPatchDTO);
         return ResponseEntity.ok(empresaExibirDTO);
     }
 
+    @Tag(name = "Empresa", description = "Endpoints para empresas")
+    @Operation(summary = "Arquivação de uma empresa")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> desativar(@PathVariable Long id) {
         empresaService.arquivar(id);
