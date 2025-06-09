@@ -39,6 +39,7 @@ public class EmpresaController {
         return empresaService.listAllPublic();
     }
 
+    @Tag(name = "Empresa", description = "Endpoints para empresas")
     @Operation(summary = "Lista empresa por id")
     @GetMapping("/id/{id}")
     public ResponseEntity<EmpresaExibirDTO> buscarPorId(@PathVariable Long id) {
