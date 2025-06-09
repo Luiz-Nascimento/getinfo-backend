@@ -43,19 +43,15 @@ public class EmpresaController {
     @Operation(summary = "Lista empresa por id")
     @GetMapping("/id/{id}")
     public ResponseEntity<EmpresaExibirDTO> buscarPorId(@PathVariable Long id) {
-        Optional<EmpresaExibirDTO> empresaPublicDTO = empresaService.buscarPorIdPublic(id);
-        return empresaPublicDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        EmpresaExibirDTO empresa = empresaService.buscarPorId(id);
+        return ResponseEntity.ok().body(empresa);
     }
 
     @Tag(name = "Empresa", description = "Endpoints para empresas")
     @Operation(summary = "Lista empresa por CNPJ")
     @GetMapping("/cnpj/{cnpj}")
     public ResponseEntity<EmpresaExibirDTO> buscarPorCnpj(@RequestParam String cnpj) {
-        Optional<EmpresaExibirDTO> empresaExibirDTO = empresaService.buscarPorCnpjDTO(cnpj);
-        if (empresaExibirDTO.isPresent()) {
-            return ResponseEntity.ok(empresaExibirDTO.get());
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(empresaService.buscarPorCnpjDTO(cnpj));
     }
 
     @Tag(name = "Empresa", description = "Endpoints para empresas")
@@ -83,7 +79,7 @@ public class EmpresaController {
     }
 
     @Tag(name = "Empresa", description = "Endpoints para empresas")
-    @Operation(summary = "Arquivação de uma empresa")
+    @Operation(summary = "Deleção lógica de uma empresa")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> desativar(@PathVariable Long id) {
         empresaService.arquivar(id);
