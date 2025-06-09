@@ -29,21 +29,19 @@ public class EmpresaService {
     @Autowired
     private ContratoMapper contratoMapper;
 
-    public List<Empresa> listarTodas() {
-        return empresaRepository.findAll();
-    }
-
     public List<EmpresaExibirDTO> listAllPublic() {
         List<EmpresaExibirDTO> empresaExibirDTOS = new ArrayList<>();
-        for(Empresa empresa: listarTodas()) {
+        for(Empresa empresa: empresaRepository.findAll()) {
             empresaExibirDTOS.add(empresaMapper.entityToExibirDTO(empresa));
 
         }
         return empresaExibirDTOS;
     }
 
-    public Optional<Empresa> buscarPorId(Long id) {
-        return empresaRepository.findById(id);
+    public EmpresaExibirDTO buscarPorId(Long id) {
+        Empresa empresa = empresaRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Empresa não encontrada"));
+        return empresaMapper.entityToExibirDTO(empresa);
     }
 
     public Set<ContratoExibirDTO> listarContratos(Long idEmpresa) {
@@ -61,16 +59,10 @@ public class EmpresaService {
     }
 
 
-    public Optional<EmpresaExibirDTO> buscarPorCnpjDTO(String cnpj) {
+    public EmpresaExibirDTO buscarPorCnpjDTO(String cnpj) {
         cnpj = sanitizarCnpj(cnpj);
-        Optional<Empresa> empresa = empresaRepository.findByCnpj(cnpj);
-        return empresaMapper.optionalEntityToOptionalExibirDTO(empresa);
-    }
-
-    public Optional<EmpresaExibirDTO> buscarPorIdPublic(Long id) {
-        Optional<Empresa> empresa = buscarPorId(id);
-        return empresaMapper.optionalEntityToOptionalExibirDTO(empresa);
-
+        return empresaMapper.entityToExibirDTO(empresaRepository.findByCnpj(cnpj)
+                .orElseThrow(()-> new EntityNotFoundException("Empresa não encontrada")));
     }
 
     public Empresa salvar(Empresa empresa) {
@@ -111,9 +103,6 @@ public class EmpresaService {
         return empresaMapper.createDTOtoEntity(dtoSanitizado);
     }
 
-    public void deletar(Long id) {
-        empresaRepository.deleteById(id);
-    }
     @Transactional
     public void arquivar(Long id) {
         Empresa empresa = empresaRepository.findById(id)
@@ -123,9 +112,6 @@ public class EmpresaService {
         }
         empresa.setAtivo(false);
     }
-
-
-
 
 
 
