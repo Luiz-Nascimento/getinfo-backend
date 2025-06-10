@@ -12,7 +12,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,30 @@ public class AditivoService {
             entregaveis.add(entregavelMapper.toDto(entregavel));
         }
         return entregaveis;
+    }
+
+    public byte[] obterAnexo(Long id) {
+        Aditivo aditivo = aditivoRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Aditivo não encontrado"));
+        return aditivo.getAnexo();
+    }
+
+    @Transactional
+    public void uploadAnexo(Long id, MultipartFile anexo) {
+        Aditivo aditivo = aditivoRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Aditivo não encontrado"));
+
+        if (anexo == null || anexo.isEmpty()) {
+            throw new IllegalArgumentException("Arquivo não enviado ou está vazio");
+        }
+        if (!"application/pdf".equals(anexo.getContentType())) {
+            throw new IllegalArgumentException("Tipo de arquivo não suportado. Envie um PDF.");
+        }
+        try {
+            aditivo.setAnexo(anexo.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao ler o arquivo enviado", e);
+        }
     }
 
 

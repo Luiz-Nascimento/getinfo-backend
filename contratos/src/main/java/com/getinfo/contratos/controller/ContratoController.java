@@ -63,7 +63,19 @@ public class ContratoController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=anexo.pdf")
+                "attachment; filename=anexoContrato.pdf")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(anexo);
+    }
+
+    @GetMapping("/view/{id}")
+    public ResponseEntity<byte[]> viewAnexo(@PathVariable Long id) {
+        byte[] anexo = contratoService.obterAnexo(id);
+        if (anexo == null || anexo.length == 0) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=anexoContrato.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(anexo);
     }
