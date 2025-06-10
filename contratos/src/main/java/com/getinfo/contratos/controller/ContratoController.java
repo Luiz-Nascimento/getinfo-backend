@@ -4,6 +4,7 @@ import com.getinfo.contratos.DTOs.*;
 import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.service.ContratoService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Past;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -43,6 +44,10 @@ public class ContratoController {
     public List<EntregavelExibirDTO> exibirEntregaveis(@PathVariable Long id) {
         return contratoService.exibirEntregaveis(id);
     }
+    @GetMapping("/aditivos/{id}")
+    public List<AditivoExibirDTO> exibirAditivos(@PathVariable Long id) {
+        return contratoService.exibirAditivos(id);
+    }
 
     @GetMapping("/download/{id}")
     public ResponseEntity<byte[]> downloadAnexo(@PathVariable Long id) {
@@ -67,6 +72,11 @@ public class ContratoController {
     public ResponseEntity<Void> adicionarAgregado(@RequestBody AgregadoCreateDTO agregadoCreateDTO) {
         contratoService.adicionarAgregado(agregadoCreateDTO);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/aditivar/{id}")
+    public ResponseEntity<ContratoExibirDTO> aditivar(@PathVariable Long id, AditivoCreateDTO aditivo) {
+        return ResponseEntity.ok().body(contratoService.aditivar(id, aditivo));
     }
 
     @PatchMapping("/editar/{id}")
