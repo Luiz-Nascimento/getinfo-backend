@@ -1,19 +1,18 @@
 package com.getinfo.contratos.service;
 
+import com.getinfo.contratos.DTOs.AditivoExibirDTO;
 import com.getinfo.contratos.DTOs.EntregavelCreateDTO;
 import com.getinfo.contratos.DTOs.EntregavelExibirDTO;
-import com.getinfo.contratos.entity.Contrato;
+import com.getinfo.contratos.entity.Aditivo;
 import com.getinfo.contratos.entity.Entregavel;
+import com.getinfo.contratos.mappers.AditivoMapper;
 import com.getinfo.contratos.mappers.EntregavelMapper;
-import com.getinfo.contratos.repository.ContratoRepository;
+import com.getinfo.contratos.repository.AditivoRepository;
 import com.getinfo.contratos.repository.EntregavelRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EntregavelService {
@@ -22,30 +21,20 @@ public class EntregavelService {
     private EntregavelRepository entregavelRepository;
 
     @Autowired
-    private ContratoRepository contratoRepository;
-
-    @Autowired
     private EntregavelMapper entregavelMapper;
 
+    @Autowired
+    private AditivoRepository aditivoRepository;
+    @Autowired
+    private AditivoMapper aditivoMapper;
+
     @Transactional
-    public EntregavelExibirDTO criarEntregavel(EntregavelCreateDTO dto) {
-        Entregavel entregavel = entregavelMapper.fromDto(dto);
-        Contrato contrato = contratoRepository.findById(dto.contratoId())
-                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
-        entregavel.setContrato(contrato);
+    public EntregavelExibirDTO criarEntregavelAditivo(Long idAditivo, EntregavelCreateDTO entregavelCreateDTO) {
+        Aditivo aditivo = aditivoRepository.findById(idAditivo)
+                .orElseThrow(()-> new EntityNotFoundException("Aditivo não encontrado"));
+        Entregavel entregavel = entregavelMapper.fromDto(entregavelCreateDTO);
         entregavelRepository.save(entregavel);
-        contrato.getEntregaveis().add(entregavel);
+        aditivo.getEntregaveis().add(entregavel);
         return entregavelMapper.toDto(entregavel);
     }
-
-    public List<EntregavelExibirDTO> listarTodos() {
-        return entregavelRepository.findAll().stream()
-                .map(entregavelMapper::toDto)
-                .toList();
-    }
-
-    public void deletar(Long id) {
-        entregavelRepository.deleteById(id);
-    }
-
 }

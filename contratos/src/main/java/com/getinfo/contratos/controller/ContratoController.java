@@ -61,7 +61,6 @@ public class ContratoController {
                 .body(anexo);
     }
 
-
     @PostMapping
     public ResponseEntity<ContratoExibirDTO> criarContrato(@RequestBody @Valid ContratoCreateDTO contratoCreateDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(contratoService.criarContrato(contratoCreateDTO));
@@ -77,6 +76,11 @@ public class ContratoController {
     @PostMapping("/aditivar/{id}")
     public ResponseEntity<ContratoExibirDTO> aditivar(@PathVariable Long id, AditivoCreateDTO aditivo) {
         return ResponseEntity.ok().body(contratoService.aditivar(id, aditivo));
+    }
+
+    @PostMapping("/entregavel/{id}")
+    public ResponseEntity<EntregavelExibirDTO> criarEntregavel(@PathVariable Long id, EntregavelCreateDTO dto) {
+        return ResponseEntity.ok().body(contratoService.criarEntregavel(id, dto));
     }
 
     @PatchMapping("/editar/{id}")
