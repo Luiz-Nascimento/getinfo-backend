@@ -6,6 +6,7 @@ import com.getinfo.contratos.DTOs.EntregavelExibirDTO;
 import com.getinfo.contratos.entity.Aditivo;
 import com.getinfo.contratos.service.AditivoService;
 import com.getinfo.contratos.service.EntregavelService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/aditivos")
+@Tag(name = "Aditivo", description = "Endpoints para aditivos")
 public class AditivoController {
 
     @Autowired

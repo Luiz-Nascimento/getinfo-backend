@@ -20,6 +20,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/empresas")
+@Tag(name = "Empresa", description = "Endpoints para empresas")
 public class EmpresaController {
 
     @Autowired
@@ -28,7 +29,6 @@ public class EmpresaController {
     @Autowired
     private EmpresaMapper empresaMapper;
 
-    @Tag(name = "Empresa", description = "Endpoints para empresas")
 
     @Operation(summary = "Lista todas empresas cadastradas")
     @GetMapping
@@ -36,7 +36,6 @@ public class EmpresaController {
         return empresaService.listAllPublic();
     }
 
-    @Tag(name = "Empresa", description = "Endpoints para empresas")
     @Operation(summary = "Lista empresa por id")
     @GetMapping("/id/{id}")
     public ResponseEntity<EmpresaExibirDTO> buscarPorId(@PathVariable Long id) {
@@ -44,21 +43,18 @@ public class EmpresaController {
         return ResponseEntity.ok().body(empresa);
     }
 
-    @Tag(name = "Empresa", description = "Endpoints para empresas")
     @Operation(summary = "Lista empresa por CNPJ")
     @GetMapping("/cnpj/{cnpj}")
     public ResponseEntity<EmpresaExibirDTO> buscarPorCnpj(@RequestParam String cnpj) {
         return ResponseEntity.ok().body(empresaService.buscarPorCnpjDTO(cnpj));
     }
 
-    @Tag(name = "Empresa", description = "Endpoints para empresas")
     @Operation(summary = "Exibe contratos relacionado a uma empresa")
     @GetMapping("/contratos/{id}")
-    public Set<ContratoExibirDTO> exibirContratos(Long id) {
+    public Set<ContratoExibirDTO> exibirContratos(@PathVariable Long id) {
         return empresaService.listarContratos(id);
     }
 
-    @Tag(name = "Empresa", description = "Endpoints para empresas")
     @Operation(summary = "Criação de uma empresa")
     @PostMapping
     public ResponseEntity<EmpresaExibirDTO> salvar(@RequestBody @Valid EmpresaCreateDTO empresaDTO) {
@@ -67,7 +63,7 @@ public class EmpresaController {
         EmpresaExibirDTO response = empresaMapper.entityToExibirDTO(empresa);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    @Tag(name = "Empresa", description = "Endpoints para empresas")
+
     @Operation(summary = "Edição de uma empresa")
     @PatchMapping("/editar/{id}")
     public ResponseEntity<EmpresaExibirDTO> editar(@PathVariable Long id, @Valid @RequestBody EmpresaPatchDTO empresaPatchDTO) {
@@ -75,22 +71,12 @@ public class EmpresaController {
         return ResponseEntity.ok(empresaExibirDTO);
     }
 
-    @Tag(name = "Empresa", description = "Endpoints para empresas")
     @Operation(summary = "Deleção lógica de uma empresa")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> desativar(@PathVariable Long id) {
         empresaService.arquivar(id);
         return ResponseEntity.noContent().build();
     }
-
-
-
-
-
-
-
-
-
 
 
 
