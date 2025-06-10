@@ -4,10 +4,7 @@ package com.getinfo.contratos.service;
 import com.getinfo.contratos.DTOs.*;
 import com.getinfo.contratos.entity.*;
 import com.getinfo.contratos.enums.StatusContrato;
-import com.getinfo.contratos.mappers.AgregadoMapper;
-import com.getinfo.contratos.mappers.ColaboradorMapper;
-import com.getinfo.contratos.mappers.ContratoMapper;
-import com.getinfo.contratos.mappers.EntregavelMapper;
+import com.getinfo.contratos.mappers.*;
 import com.getinfo.contratos.repository.AgregadoRepository;
 import com.getinfo.contratos.repository.ColaboradorRepository;
 import com.getinfo.contratos.repository.ContratoRepository;
@@ -47,6 +44,9 @@ public class ContratoService {
     @Autowired
     private AgregadoMapper agregadoMapper;
 
+    @Autowired
+    private AditivoMapper aditivoMapper;
+
     public Contrato acharPorId(Long id) {
         return contratoRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Contrato não encontrado"));
@@ -81,6 +81,15 @@ public class ContratoService {
         return entregaveisExibir;
     }
 
+    public List<AditivoExibirDTO> exibirAditivos(Long id) {
+        Contrato contrato = acharPorId(id);
+        List<AditivoExibirDTO> aditivosDTO = new ArrayList<>();
+        for (Aditivo aditivo: contrato.getAditivos()) {
+            aditivosDTO.add(aditivoMapper.toExibirDTO(aditivo));
+        }
+        return aditivosDTO;
+    }
+
     public byte[] obterAnexo(Long id) {
         Contrato contrato = contratoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
@@ -104,6 +113,17 @@ public class ContratoService {
         Contrato contrato = acharPorId(id);
         contratoMapper.patchContratoFromDto(contratoPatchDTO, contrato);
         contratoRepository.save(contrato);
+        return contratoMapper.entityToDTO(contrato);
+    }
+
+    @Transactional
+    public ContratoExibirDTO aditivar(Long idContrato, AditivoCreateDTO aditivoDto) {
+        Contrato contrato = acharPorId(idContrato);
+        Aditivo aditivo = aditivoMapper.toEntity(aditivoDto);
+        aditivo.setContrato(contrato);
+        contrato.setValor(contrato.getValor().add(aditivoDto.valorAditivo()));
+        contrato.setDataFim(contrato.getDataFim().plusDays(aditivoDto.diasAditivo()));
+        contrato.getAditivos().add(aditivo);
         return contratoMapper.entityToDTO(contrato);
     }
 
