@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/colaboradores")
+@Tag(name = "Colaborador", description = "Endpoints para colaborador")
 public class ColaboradorController {
 
     @Autowired
@@ -28,7 +29,6 @@ public class ColaboradorController {
     @Autowired
     private ColaboradorMapper colaboradorMapper;
 
-    @Tag(name = "Colaborador", description = "Endpoints para colaborador")
     @GetMapping
     public List<ColaboradorExibirDTO> listarTodas() {
         return colaboradorService.listarDTOs();

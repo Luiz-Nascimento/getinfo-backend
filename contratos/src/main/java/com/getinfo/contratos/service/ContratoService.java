@@ -5,10 +5,7 @@ import com.getinfo.contratos.DTOs.*;
 import com.getinfo.contratos.entity.*;
 import com.getinfo.contratos.enums.StatusContrato;
 import com.getinfo.contratos.mappers.*;
-import com.getinfo.contratos.repository.AgregadoRepository;
-import com.getinfo.contratos.repository.ColaboradorRepository;
-import com.getinfo.contratos.repository.ContratoRepository;
-import com.getinfo.contratos.repository.EmpresaRepository;
+import com.getinfo.contratos.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +34,7 @@ public class ContratoService {
     @Autowired
     private ColaboradorRepository colaboradorRepository;
     @Autowired
-    private ColaboradorMapper colaboradorMapper;
+    private EntregavelRepository entregavelRepository;
     @Autowired
     private EntregavelMapper entregavelMapper;
     @Autowired
@@ -90,10 +87,8 @@ public class ContratoService {
     }
 
     public byte[] obterAnexo(Long id) {
-        Contrato contrato = contratoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Contrato não encontrado"));
-        byte[] anexo = contrato.getAnexo();
-        return anexo;
+        Contrato contrato = acharPorId(id);
+        return contrato.getAnexo();
     }
 
     @Transactional
@@ -126,10 +121,16 @@ public class ContratoService {
         return contratoMapper.entityToDTO(contrato);
     }
 
-    public void deletar(Long id) {
-        contratoRepository.deleteById(id);
-    }
 
+    @Transactional
+    public EntregavelExibirDTO criarEntregavel(Long contratoId, EntregavelCreateDTO dto) {
+        Entregavel entregavel = entregavelMapper.fromDto(dto);
+        Contrato contrato = acharPorId(contratoId);
+        entregavel.setContrato(contrato);
+        entregavelRepository.save(entregavel);
+        contrato.getEntregaveis().add(entregavel);
+        return entregavelMapper.toDto(entregavel);
+    }
 
 
     @Transactional

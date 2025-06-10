@@ -5,6 +5,7 @@ import com.getinfo.contratos.enums.StatusEntregavel;
 import java.time.LocalDate;
 
 public record EntregavelExibirDTO (
+        Long idContrato,
         StatusEntregavel status,
         String descricao,
         String observacao,

@@ -3,6 +3,7 @@ package com.getinfo.contratos.controller;
 
 import com.getinfo.contratos.DTOs.UsuarioExibirDTO;
 import com.getinfo.contratos.service.UsuarioService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/usuarios")
+@Tag(name = "Usuario", description = "Endpoints para usuario")
 public class UsuarioController {
 
     @Autowired

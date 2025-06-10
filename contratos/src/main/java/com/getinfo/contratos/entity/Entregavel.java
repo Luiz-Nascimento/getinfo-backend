@@ -16,7 +16,7 @@ public class Entregavel {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contrato_id", nullable = false)
+    @JoinColumn(name = "contrato_id")
     private Contrato contrato;
 
     // --- Relacionamento Muitos-para-Muitos com Aditivo ---
