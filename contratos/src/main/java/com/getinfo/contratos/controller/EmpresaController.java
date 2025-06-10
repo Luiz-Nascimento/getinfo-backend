@@ -7,8 +7,6 @@ import com.getinfo.contratos.DTOs.EmpresaPatchDTO;
 import com.getinfo.contratos.entity.Empresa;
 import com.getinfo.contratos.mappers.EmpresaMapper;
 import com.getinfo.contratos.service.EmpresaService;
-import io.swagger.v3.oas.annotations.OpenAPI31;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
