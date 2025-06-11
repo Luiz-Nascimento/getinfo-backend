@@ -90,6 +90,15 @@ public class ContratoService {
         return aditivosDTO;
     }
 
+    public List<RepactuacaoExibirDTO> exibirRepactuacoes(Long id) {
+        Contrato contrato = acharPorId(id);
+        List<RepactuacaoExibirDTO> repactuacoesDTO = new ArrayList<>();
+        for (Repactuacao repactuacao: contrato.getRepactuacoes()) {
+            repactuacoesDTO.add(repactuacaoMapper.toDto(repactuacao));
+        }
+        return repactuacoesDTO;
+    }
+
     public byte[] obterAnexo(Long id) {
         Contrato contrato = acharPorId(id);
         return contrato.getAnexo();

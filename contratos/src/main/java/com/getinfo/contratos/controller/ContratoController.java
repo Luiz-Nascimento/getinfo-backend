@@ -1,6 +1,7 @@
 package com.getinfo.contratos.controller;
 
 import com.getinfo.contratos.DTOs.*;
+import com.getinfo.contratos.entity.Repactuacao;
 import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.service.ContratoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -49,6 +50,11 @@ public class ContratoController {
     @GetMapping("/aditivos/{id}")
     public List<AditivoExibirDTO> exibirAditivos(@PathVariable Long id) {
         return contratoService.exibirAditivos(id);
+    }
+
+    @GetMapping("/repactuacoes/{id}")
+    public List<RepactuacaoExibirDTO> exibirRepactuacoes(@PathVariable Long id) {
+        return contratoService.exibirRepactuacoes(id);
     }
 
     @GetMapping("/download/{id}")
