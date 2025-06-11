@@ -20,42 +20,37 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/contratos")
+@Tag(name = "Contrato", description = "Endpoints para contratos")
 public class ContratoController {
 
     @Autowired
     private ContratoService contratoService;
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @GetMapping
     public List<ContratoExibirDTO> listarContratos() {
         return contratoService.listarContratos();
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @GetMapping("/{id}")
     public ResponseEntity<ContratoExibirDTO> buscarPorId(@PathVariable Long id) {
         ContratoExibirDTO contrato = contratoService.buscarPorId(id);
         return ResponseEntity.ok().body(contrato);
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @GetMapping("/agregados/{id}")
     public Set<AgregadoExibirDTO> listarAgregados(@PathVariable Long id) {
         return contratoService.exibirAgregados(id);
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @GetMapping("/entregaveis/{id}")
     public List<EntregavelExibirDTO> exibirEntregaveis(@PathVariable Long id) {
         return contratoService.exibirEntregaveis(id);
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @GetMapping("/aditivos/{id}")
     public List<AditivoExibirDTO> exibirAditivos(@PathVariable Long id) {
         return contratoService.exibirAditivos(id);
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @GetMapping("/download/{id}")
     public ResponseEntity<byte[]> downloadAnexo(@PathVariable Long id) {
         byte[] anexo = contratoService.obterAnexo(id);
@@ -80,54 +75,53 @@ public class ContratoController {
                 .body(anexo);
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @PostMapping
     public ResponseEntity<ContratoExibirDTO> criarContrato(@RequestBody @Valid ContratoCreateDTO contratoCreateDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(contratoService.criarContrato(contratoCreateDTO));
 
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @PostMapping("/agregados/")
     public ResponseEntity<Void> adicionarAgregado(@RequestBody AgregadoCreateDTO agregadoCreateDTO) {
         contratoService.adicionarAgregado(agregadoCreateDTO);
         return ResponseEntity.noContent().build();
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @PostMapping("/aditivar/{id}")
     public ResponseEntity<ContratoExibirDTO> aditivar(@PathVariable Long id, AditivoCreateDTO aditivo) {
         return ResponseEntity.ok().body(contratoService.aditivar(id, aditivo));
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
+    @PostMapping("/repactuar/{id}")
+    public ResponseEntity<RepactuacaoExibirDTO> repactuar(@PathVariable Long id, RepactuacaoCreateDTO repactuacaoCreateDTO) {
+        RepactuacaoExibirDTO repactuacaoExibirDTO = contratoService.repactuar(id, repactuacaoCreateDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(repactuacaoExibirDTO);
+    }
+
+
     @PostMapping("/entregavel/{id}")
     public ResponseEntity<EntregavelExibirDTO> criarEntregavel(@PathVariable Long id, EntregavelCreateDTO dto) {
         return ResponseEntity.ok().body(contratoService.criarEntregavel(id, dto));
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @PatchMapping("/editar/{id}")
     public ResponseEntity<ContratoExibirDTO> editarContrato(@PathVariable Long id, @RequestBody ContratoPatchDTO contratoPatchDTO) {
         ContratoExibirDTO contratoExibirDTO = contratoService.editarContrato(id, contratoPatchDTO);
         return ResponseEntity.ok().body(contratoExibirDTO);
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @PatchMapping("/ativar/{id}")
     public ResponseEntity<Void> ativarContrato(@PathVariable Long id) {
         contratoService.ativar(id);
         return ResponseEntity.ok().build();
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @PatchMapping(value = "/upload/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> atualizarAnexo(@PathVariable Long id, @RequestParam("anexo") MultipartFile anexo) {
         contratoService.atualizarAnexo(id, anexo);
         return ResponseEntity.noContent().build();
     }
 
-    @Tag(name = "Contrato", description = "Endpoints para contratos")
     @DeleteMapping("/arquivar/{id}")
     public ResponseEntity<Void> arquivarContrato(@PathVariable Long id) {
         contratoService.arquivar(id);
