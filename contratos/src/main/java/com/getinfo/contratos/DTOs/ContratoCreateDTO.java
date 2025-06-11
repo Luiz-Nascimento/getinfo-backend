@@ -28,7 +28,6 @@ public record ContratoCreateDTO(
         LocalDate dataInicio,
 
         @NotNull(message = "A data de fim é obrigatória")
-        @Future(message = "A data de fim deve ser no futuro")
         LocalDate dataFim,
 
         @NotBlank(message= "Nome do responsável é obrigatório")
