@@ -15,6 +15,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 @Entity
 @Table(name = "contratos")
@@ -56,6 +57,9 @@ public class Contrato {
             fetch = FetchType.LAZY     // Aditivos são carregados apenas quando acessados
     )
     private Set<Aditivo> aditivos = new HashSet<>();
+    
+    @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Repactuacao> repactuacoes;
 
 
     @Enumerated(EnumType.STRING)
