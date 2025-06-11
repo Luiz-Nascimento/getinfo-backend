@@ -14,21 +14,6 @@ public class RepactuacaoService {
     @Autowired
     private RepactuacaoRepository repactuacaoRepository;
 
-    public List<Repactuacao> listarTodas() {
-        return repactuacaoRepository.findAll();
-    }
 
-
-    public Optional<Repactuacao> buscarPorId(Long id) {
-        return repactuacaoRepository.findById(id);
-    }
-
-    public Repactuacao salvar(Repactuacao repactuacao) {
-        return repactuacaoRepository.save(repactuacao);
-    }
-
-    public void deletar(Long id) {
-        repactuacaoRepository.deleteById(id);
-    }
 
 }
