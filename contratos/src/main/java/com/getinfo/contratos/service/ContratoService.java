@@ -42,6 +42,10 @@ public class ContratoService {
 
     @Autowired
     private AditivoMapper aditivoMapper;
+    @Autowired
+    private RepactuacaoMapper repactuacaoMapper;
+    @Autowired
+    private RepactuacaoRepository repactuacaoRepository;
 
     public Contrato acharPorId(Long id) {
         return contratoRepository.findById(id)
@@ -86,6 +90,15 @@ public class ContratoService {
         return aditivosDTO;
     }
 
+    public List<RepactuacaoExibirDTO> exibirRepactuacoes(Long id) {
+        Contrato contrato = acharPorId(id);
+        List<RepactuacaoExibirDTO> repactuacoesDTO = new ArrayList<>();
+        for (Repactuacao repactuacao: contrato.getRepactuacoes()) {
+            repactuacoesDTO.add(repactuacaoMapper.toDto(repactuacao));
+        }
+        return repactuacoesDTO;
+    }
+
     public byte[] obterAnexo(Long id) {
         Contrato contrato = acharPorId(id);
         return contrato.getAnexo();
@@ -119,6 +132,17 @@ public class ContratoService {
         contrato.setDataFim(contrato.getDataFim().plusDays(aditivoDto.diasAditivo()));
         contrato.getAditivos().add(aditivo);
         return contratoMapper.entityToDTO(contrato);
+    }
+
+    @Transactional
+    public RepactuacaoExibirDTO repactuar(Long idContrato, RepactuacaoCreateDTO repactuacaoCreateDTO) {
+        Contrato contrato = acharPorId(idContrato);
+        Repactuacao repactuacao = repactuacaoMapper.toEntity(repactuacaoCreateDTO);
+        repactuacao.setContrato(contrato);
+        repactuacao.setValorOriginalContrato(contrato.getValor());
+        repactuacaoRepository.save(repactuacao);
+        contrato.getRepactuacoes().add(repactuacao);
+        return repactuacaoMapper.toDto(repactuacao);
     }
 
 

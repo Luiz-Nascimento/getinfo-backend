@@ -51,10 +51,10 @@ public class Contrato {
     private Set<Entregavel> entregaveis = new HashSet<>();
 
     @OneToMany(
-            mappedBy = "contrato", // 'contrato' é o nome do campo na entidade Aditivo que mapeia este relacionamento
-            cascade = CascadeType.ALL, // Operações em Contrato são propagadas para Aditivo
-            orphanRemoval = true,      // Aditivos sem contrato pai são removidos (use com cautela)
-            fetch = FetchType.LAZY     // Aditivos são carregados apenas quando acessados
+            mappedBy = "contrato",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
     )
     private Set<Aditivo> aditivos = new HashSet<>();
     
