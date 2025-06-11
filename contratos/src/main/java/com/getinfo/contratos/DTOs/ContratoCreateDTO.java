@@ -25,7 +25,6 @@ public record ContratoCreateDTO(
         TipoContrato tipo,
 
         @NotNull(message = "A data de início é obrigatória")
-        @PastOrPresent(message = "A data de início não pode ser no futuro")
         LocalDate dataInicio,
 
         @NotNull(message = "A data de fim é obrigatória")
