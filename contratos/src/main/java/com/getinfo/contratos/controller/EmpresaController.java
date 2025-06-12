@@ -30,13 +30,15 @@ public class EmpresaController {
     private EmpresaMapper empresaMapper;
 
 
-    @Operation(summary = "Lista todas empresas cadastradas")
+    @Operation(summary = "Lista todas empresas cadastradas",
+            description = "Retorna uma lista com todas empresas cadastradas no sistema.")
     @GetMapping
     public List<EmpresaExibirDTO> listarTodas() {
         return empresaService.listAllPublic();
     }
 
-    @Operation(summary = "Lista empresa por id")
+    @Operation(summary = "Lista empresa por id",
+            description = "Retorna uma empresa cadastrada pelo id especificado, e com os campos do DTO de exibição.")
     @GetMapping("/id/{id}")
     public ResponseEntity<EmpresaExibirDTO> buscarPorId(@PathVariable Long id) {
         EmpresaExibirDTO empresa = empresaService.buscarPorId(id);
