@@ -31,7 +31,6 @@ public class Entregavel {
     @Column(nullable = false)
     private StatusEntregavel status = StatusEntregavel.PENDENTE;
 
-    @Column(nullable = false)
     private String descricao;
 
     private String observacao;
