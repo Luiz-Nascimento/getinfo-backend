@@ -46,6 +46,8 @@ public class ContratoService {
     private RepactuacaoMapper repactuacaoMapper;
     @Autowired
     private RepactuacaoRepository repactuacaoRepository;
+    @Autowired
+    private AditivoRepository aditivoRepository;
 
     public Contrato acharPorId(Long id) {
         return contratoRepository.findById(id)
@@ -131,6 +133,7 @@ public class ContratoService {
         contrato.setValor(contrato.getValor().add(aditivoDto.valorAditivo()));
         contrato.setDataFim(contrato.getDataFim().plusDays(aditivoDto.diasAditivo()));
         contrato.getAditivos().add(aditivo);
+        aditivoRepository.save(aditivo);
         return aditivoMapper.toExibirDTO(aditivo);
     }
 
