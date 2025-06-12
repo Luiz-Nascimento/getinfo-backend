@@ -95,20 +95,20 @@ public class ContratoController {
     }
 
     @PostMapping("/aditivar/{id}")
-    public ResponseEntity<AditivoExibirDTO> aditivar(@PathVariable Long id, AditivoCreateDTO aditivo) {
+    public ResponseEntity<AditivoExibirDTO> aditivar(@PathVariable Long id, @RequestBody AditivoCreateDTO aditivo) {
         AditivoExibirDTO aditivoExibirDTO = contratoService.aditivar(id, aditivo);
         return ResponseEntity.status(HttpStatus.CREATED).body(aditivoExibirDTO);
     }
 
     @PostMapping("/repactuar/{id}")
-    public ResponseEntity<RepactuacaoExibirDTO> repactuar(@PathVariable Long id, RepactuacaoCreateDTO repactuacaoCreateDTO) {
+    public ResponseEntity<RepactuacaoExibirDTO> repactuar(@PathVariable Long id, @RequestBody RepactuacaoCreateDTO repactuacaoCreateDTO) {
         RepactuacaoExibirDTO repactuacaoExibirDTO = contratoService.repactuar(id, repactuacaoCreateDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(repactuacaoExibirDTO);
     }
 
 
     @PostMapping("/entregavel/{id}")
-    public ResponseEntity<EntregavelExibirDTO> criarEntregavel(@PathVariable Long id, EntregavelCreateDTO dto) {
+    public ResponseEntity<EntregavelExibirDTO> criarEntregavel(@PathVariable Long id, @RequestBody EntregavelCreateDTO dto) {
         EntregavelExibirDTO entregavelExibirDTO = contratoService.criarEntregavel(id, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(entregavelExibirDTO);
     }
