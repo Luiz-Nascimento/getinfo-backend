@@ -124,14 +124,14 @@ public class ContratoService {
     }
 
     @Transactional
-    public ContratoExibirDTO aditivar(Long idContrato, AditivoCreateDTO aditivoDto) {
+    public AditivoExibirDTO aditivar(Long idContrato, AditivoCreateDTO aditivoDto) {
         Contrato contrato = acharPorId(idContrato);
         Aditivo aditivo = aditivoMapper.toEntity(aditivoDto);
         aditivo.setContrato(contrato);
         contrato.setValor(contrato.getValor().add(aditivoDto.valorAditivo()));
         contrato.setDataFim(contrato.getDataFim().plusDays(aditivoDto.diasAditivo()));
         contrato.getAditivos().add(aditivo);
-        return contratoMapper.entityToDTO(contrato);
+        return aditivoMapper.toExibirDTO(aditivo);
     }
 
     @Transactional

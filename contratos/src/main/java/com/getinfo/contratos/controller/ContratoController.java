@@ -1,6 +1,7 @@
 package com.getinfo.contratos.controller;
 
 import com.getinfo.contratos.DTOs.*;
+import com.getinfo.contratos.entity.Aditivo;
 import com.getinfo.contratos.entity.Repactuacao;
 import com.getinfo.contratos.repository.ContratoRepository;
 import com.getinfo.contratos.service.ContratoService;
@@ -94,8 +95,9 @@ public class ContratoController {
     }
 
     @PostMapping("/aditivar/{id}")
-    public ResponseEntity<ContratoExibirDTO> aditivar(@PathVariable Long id, AditivoCreateDTO aditivo) {
-        return ResponseEntity.ok().body(contratoService.aditivar(id, aditivo));
+    public ResponseEntity<AditivoExibirDTO> aditivar(@PathVariable Long id, AditivoCreateDTO aditivo) {
+        AditivoExibirDTO aditivoExibirDTO = contratoService.aditivar(id, aditivo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(aditivoExibirDTO);
     }
 
     @PostMapping("/repactuar/{id}")
@@ -107,7 +109,8 @@ public class ContratoController {
 
     @PostMapping("/entregavel/{id}")
     public ResponseEntity<EntregavelExibirDTO> criarEntregavel(@PathVariable Long id, EntregavelCreateDTO dto) {
-        return ResponseEntity.ok().body(contratoService.criarEntregavel(id, dto));
+        EntregavelExibirDTO entregavelExibirDTO = contratoService.criarEntregavel(id, dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(entregavelExibirDTO);
     }
 
     @PatchMapping("/editar/{id}")
