@@ -1,5 +1,7 @@
 package com.getinfo.contratos.DTOs;
 
+import com.getinfo.contratos.enums.ColaboradorStatus;
+import com.getinfo.contratos.enums.StatusContrato;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -19,6 +21,7 @@ public record ColaboradorPatchDTO(
         String telefone,
 
         @Size(min = 2, max = 50, message = "O cargo deve ter entre 2 e 50 caracteres")
-        String cargo
+        String cargo,
+        ColaboradorStatus status
 
 ) {}

@@ -66,6 +66,9 @@ public class ColaboradorService {
             if (colaboradorPatchDTO.cargo() != null) {
                 colaborador.setCargo(colaboradorPatchDTO.cargo());
             }
+            if (colaboradorPatchDTO.status() != null) {
+                colaborador.setStatus(colaboradorPatchDTO.status());
+            }
 
             salvar(colaborador);
             ColaboradorExibirDTO colaboradorExibirDTO = colaboradorMapper.entityToExibirDTO(colaborador);
