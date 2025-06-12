@@ -68,7 +68,7 @@ public class AditivoController {
 
 
     @PostMapping("/entregavel/{id}")
-    public ResponseEntity<EntregavelExibirDTO> adicionarEntregavel(@PathVariable Long id, EntregavelCreateDTO entregavelCreateDTO) {
+    public ResponseEntity<EntregavelExibirDTO> adicionarEntregavel(@PathVariable Long id, @RequestBody EntregavelCreateDTO entregavelCreateDTO) {
         return ResponseEntity.ok().body(entregavelService.criarEntregavelAditivo(id, entregavelCreateDTO));
     }
 
