@@ -35,8 +35,8 @@ public record EmpresaPatchDTO(
                 message = "Telefone do responsável em formato inválido. Exemplo: (79) 99999-8888")
         String telefoneResponsavel,
         @CPF(message = "CPF do responsável inválido")
-        String cpfResponsavel
-
+        String cpfResponsavel,
+        Boolean ativo
 
 
 ) {
