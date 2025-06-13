@@ -3,6 +3,7 @@ package com.getinfo.contratos.controller;
 import com.getinfo.contratos.DTOs.LoginRequest;
 import com.getinfo.contratos.DTOs.UsuarioRegistroDTO;
 import com.getinfo.contratos.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +26,14 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Operation(summary = "Realiza o registro de um novo usuário")
     @PostMapping("/register")
     public ResponseEntity<?> registrar(@RequestBody UsuarioRegistroDTO dto) {
         usuarioService.registrarNovoUsuario(dto);
         return ResponseEntity.ok("Usuário registrado com sucesso!");
     }
 
+    @Operation(summary = "Realiza o login de um usuário já registrado")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
